@@ -1229,6 +1229,13 @@ html[data-theme="dark"] .gear-card img{
 </style>
 
 
+
+<style id="contact-layout-fix">
+.contact-actions{display:flex;flex-wrap:wrap;gap:9px}
+.contact-actions a{display:inline-flex;align-items:center;justify-content:center}
+.contact-link-card strong{overflow-wrap:anywhere}
+</style>
+
 <style id="final-theme-fixes">
 /* Final theme fixes: light mode is the default/first view. */
 :root {
@@ -1346,6 +1353,1668 @@ html:not([data-theme="dark"]) {
 }
 </style>
 
+
+<style id="primeshot-responsive-motion-upgrade">
+/* =========================================================
+   PRIMESHOT RESPONSIVE + MOTION UPGRADE
+   ========================================================= */
+
+/* Smooth interactive motion across the site */
+button,a,.gear-card,.available-camera,.camera-frame-card,.promo,.contact-card,
+.camera-frame-photo,.gallery-shot,.hero-mini-card,.hero-camera-card,.hero-ticket,
+.booking-calendar-card,.booking-panel{
+  -webkit-tap-highlight-color:transparent;
+}
+@media (hover:hover) and (pointer:fine){
+  .gear-card,
+  .available-camera,
+  .camera-frame-card,
+  .promo,
+  .contact-card,
+  .hero-mini-card,
+  .hero-camera-card,
+  .hero-ticket,
+  .booking-calendar-card,
+  .booking-panel{
+    transition:
+      transform .35s cubic-bezier(.2,.75,.25,1),
+      box-shadow .35s ease,
+      border-color .25s ease,
+      background-color .35s ease;
+  }
+
+  .gear-card:hover{
+    transform:translateY(-9px) rotate(-.35deg);
+    box-shadow:0 28px 65px rgba(70,25,42,.15)!important;
+  }
+  .available-camera:hover{
+    transform:translateY(-7px);
+  }
+  .camera-frame-card{
+    position:relative;
+  }
+  .camera-frame-card:hover{
+    transform:translateY(-5px) scale(1.012);
+    z-index:2;
+  }
+  .camera-frame-card:hover .camera-frame-photo{
+    box-shadow:0 16px 34px rgba(70,25,42,.16);
+  }
+  .camera-frame-photo{
+    transition:transform .35s cubic-bezier(.2,.75,.25,1),box-shadow .35s ease,filter .35s ease;
+  }
+  .camera-frame-card:hover .camera-frame-photo{
+    transform:scale(1.025);
+    filter:saturate(1.04);
+  }
+  .promo:hover{
+    transform:translateY(-7px) rotate(0deg)!important;
+    box-shadow:0 25px 60px rgba(70,25,42,.16);
+  }
+  .contact-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 24px 55px rgba(70,25,42,.14)!important;
+  }
+  .hero-mini-card:hover,.hero-camera-card:hover,.hero-ticket:hover{
+    transform:translateY(-5px);
+  }
+  .booking-calendar-card:hover,.booking-panel:hover{
+    box-shadow:0 28px 70px rgba(70,25,42,.14)!important;
+  }
+}
+
+/* Touch devices still get feedback without relying on hover */
+@media (hover:none){
+  .gear-card:active,
+  .available-camera:active,
+  .camera-frame-card:active,
+  .promo:active,
+  .contact-card:active{
+    transform:scale(.985);
+  }
+}
+
+/* Instagram-like gallery interaction */
+.camera-frame-card{
+  cursor:pointer;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+}
+.camera-frame-card .camera-frame-photo{
+  position:relative;
+}
+.camera-frame-card .camera-frame-photo:after{
+  content:"HOLD TO VIEW";
+  position:absolute;
+  left:50%;
+  bottom:12px;
+  transform:translate(-50%,8px);
+  opacity:0;
+  padding:6px 9px;
+  border-radius:999px;
+  background:rgba(20,10,14,.78);
+  color:#fff;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.12em;
+  pointer-events:none;
+  transition:opacity .25s ease,transform .25s ease;
+  z-index:3;
+}
+@media (hover:hover) and (pointer:fine){
+  .camera-frame-card:hover .camera-frame-photo:after{
+    opacity:1;
+    transform:translate(-50%,0);
+  }
+}
+
+/* Full-screen gallery viewer */
+.gallery-viewer{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:rgba(10,6,9,.82);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .28s ease,visibility .28s ease;
+}
+.gallery-viewer.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.gallery-viewer-panel{
+  width:min(720px,100%);
+  max-height:92vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:24px;
+  background:#160d12;
+  color:#fff;
+  box-shadow:0 30px 100px rgba(0,0,0,.55);
+  transform:translateY(18px) scale(.97);
+  transition:transform .32s cubic-bezier(.2,.75,.25,1);
+}
+.gallery-viewer.open .gallery-viewer-panel{
+  transform:none;
+}
+.gallery-viewer-media{
+  min-height:min(62vh,620px);
+  display:grid;
+  place-items:center;
+  position:relative;
+  background:radial-gradient(circle at 50% 40%,#3b1e2a 0,#160d12 65%);
+}
+.gallery-viewer-media img{
+  width:100%;
+  height:100%;
+  max-height:68vh;
+  object-fit:contain;
+}
+.gallery-viewer-placeholder{
+  width:min(430px,78%);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:30px;
+  border:1px dashed rgba(255,255,255,.22);
+  color:#f5dbe4;
+  letter-spacing:.14em;
+  font-size:10px;
+  font-weight:900;
+}
+.gallery-viewer-info{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:16px 18px 18px;
+}
+.gallery-viewer-title{
+  font:700 22px Georgia,serif;
+  margin:0 0 3px;
+}
+.gallery-viewer-meta{
+  margin:0;
+  color:#cdb7c0;
+  font-size:10px;
+  letter-spacing:.08em;
+}
+.gallery-viewer-close{
+  flex:0 0 auto;
+  width:42px;height:42px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  cursor:pointer;
+  font-size:22px;
+  line-height:1;
+  transition:transform .2s ease,background .2s ease;
+}
+.gallery-viewer-close:hover{
+  transform:rotate(90deg) scale(1.05);
+  background:rgba(255,255,255,.15);
+}
+
+/* Floating camera button appears after scrolling */
+.scroll-camera-fab{display:none!important;
+  position:fixed;
+  right:18px;
+  top:50%;
+  z-index:80;
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  color:var(--ink);
+  box-shadow:0 14px 35px rgba(40,15,25,.18);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  cursor:pointer;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translate(24px,-50%) scale(.75);
+  transition:opacity .3s ease,visibility .3s ease,transform .35s cubic-bezier(.2,.75,.25,1),background .2s ease;
+}
+.scroll-camera-fab.visible{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translate(0,-50%) scale(1);
+}
+.scroll-camera-fab:hover{
+  transform:translate(-3px,-50%) scale(1.08);
+}
+.scroll-camera-fab:active{
+  transform:translate(0,-50%) scale(.94);
+}
+.scroll-camera-fab svg{
+  width:22px;
+  height:22px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.8;
+}
+.scroll-camera-fab .fab-label{
+  position:absolute;
+  right:60px;
+  white-space:nowrap;
+  padding:6px 9px;
+  border-radius:999px;
+  background:var(--ink);
+  color:var(--cream);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.1em;
+  opacity:0;
+  transform:translateX(6px);
+  pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.scroll-camera-fab:hover .fab-label{
+  opacity:1;
+  transform:none;
+}
+
+/* Contact section */
+.contacts-section{
+  background:var(--cream);
+  position:relative;
+  overflow:hidden;
+}
+.contacts-section:before{
+  content:"";
+  position:absolute;
+  width:340px;height:340px;
+  right:-120px;top:-120px;
+  border:1px solid rgba(231,141,167,.22);
+  border-radius:50%;
+  box-shadow:0 0 0 50px rgba(231,141,167,.04),0 0 0 100px rgba(231,141,167,.025);
+  pointer-events:none;
+}
+.contacts-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+.contact-main,.contact-links{
+  position:relative;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:5px 30px 5px 30px;
+  box-shadow:var(--shadow);
+}
+.contact-main{
+  padding:42px 46px;
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);
+  column-gap:56px;
+  align-items:center;
+}
+.contact-main > .kicker{
+  grid-column:1 / -1;
+  margin-bottom:4px;
+}
+.contact-main h2{
+  font:700 clamp(42px,6vw,74px)/.92 Georgia,serif;
+  letter-spacing:-.055em;
+  margin:8px 0 16px;
+}
+.contact-main p{
+  max-width:560px;
+  color:var(--soft);
+  font-size:14px;
+}
+.contact-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:25px;
+}
+.contact-actions a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  padding:0 17px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:11px;
+  font-weight:900;
+  transition:transform .22s ease,box-shadow .22s ease,background .22s ease;
+}
+.contact-actions a:first-child{
+  background:var(--ink);
+  color:var(--cream);
+}
+.contact-actions a:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 25px rgba(60,20,35,.12);
+}
+.contact-links{
+  padding:24px;
+  display:grid;
+  gap:10px;
+  align-content:center;
+}
+.contact-link-card{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:color-mix(in srgb,var(--paper) 88%,var(--blush));
+  transition:transform .25s ease,background .25s ease,border-color .25s ease;
+}
+.contact-link-card:hover{
+  transform:translateX(5px);
+  border-color:var(--rose);
+}
+.contact-link-icon{
+  width:40px;height:40px;
+  display:grid;place-items:center;
+  border-radius:12px;
+  background:var(--blush);
+  color:var(--berry);
+  font-size:17px;
+}
+.contact-link-card small{
+  display:block;
+  color:var(--soft);
+  font-size:8px;
+  letter-spacing:.12em;
+  font-weight:900;
+}
+.contact-link-card strong{
+  display:block;
+  margin-top:2px;
+  font-size:13px;
+}
+@media(max-width:800px){
+  .contacts-grid{grid-template-columns:1fr}
+  .contact-main{padding:28px;display:block}
+  .contact-main > .kicker,.contact-main h2,.contact-main p,.contact-main .contact-actions{grid-column:auto;grid-row:auto}
+  .contact-main h2{margin-top:8px}
+  .contact-main .contact-actions{margin-top:25px}
+}
+@media(max-width:560px){
+  .scroll-camera-fab{display:none!important;
+    right:10px;
+    width:46px;height:46px;
+  }
+  .scroll-camera-fab .fab-label{display:none}
+  .gallery-viewer{padding:10px}
+  .gallery-viewer-panel{border-radius:18px}
+  .gallery-viewer-media{min-height:58vh}
+  .gallery-viewer-info{padding:13px}
+  .gallery-viewer-title{font-size:18px}
+  .contact-main h2{font-size:46px}
+  .contact-actions{flex-direction:column}
+  .contact-actions a{width:100%}
+}
+</style>
+
+
+<style id="calendar-dark-date-fix">
+html[data-theme="dark"] .booking-calendar-card .day,
+html[data-theme="dark"] .booking-calendar-card .day .day-number,
+html[data-theme="dark"] .booking-calendar-card .day.booked,
+html[data-theme="dark"] .booking-calendar-card .day.booked .day-number{
+  color:#ffffff !important;
+}
+html[data-theme="dark"] .booking-calendar-card .day.empty{
+  color:transparent !important;
+}
+html[data-theme="dark"] .booking-calendar-card .day.today{
+  color:#ffffff !important;
+}
+html[data-theme="dark"] .booking-calendar-card .week div{
+  color:#d8c5cd !important;
+}
+html[data-theme="dark"] .booking-calendar-card .day.booked{
+  background:rgba(212,91,128,.22)!important;
+  border-color:rgba(212,91,128,.45)!important;
+}
+.is-pressing{transform:scale(.97)!important}
+</style>
+
+
+<style id="promo-mobile-fix">
+  /* Promo posters: screenshot-friendly and mobile-safe */
+  .promo-wall{
+    align-items:stretch;
+  }
+  .promo{
+    min-width:0;
+    overflow:hidden;
+    overflow-wrap:anywhere;
+    word-break:normal;
+  }
+  .promo h3,
+  .promo.main h3{
+    line-height:.94;
+    letter-spacing:-.055em;
+    overflow-wrap:anywhere;
+    text-wrap:balance;
+  }
+  .promo p{
+    line-height:1.55;
+    overflow-wrap:anywhere;
+  }
+
+  @media (max-width: 700px){
+    .promo-wall{
+      grid-template-columns:1fr;
+      grid-template-rows:auto;
+      gap:12px;
+    }
+    .promo,
+    .promo.main{
+      grid-row:auto;
+      transform:none;
+      min-height:260px;
+      padding:24px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:flex-start;
+    }
+    .promo h3,
+    .promo.main h3{
+      font-size:clamp(2.25rem,11vw,3.5rem);
+      line-height:.92;
+      max-width:100%;
+      margin-top:12px;
+    }
+    .promo p{
+      max-width:100%;
+      font-size:.92rem;
+      margin-top:12px;
+      padding-right:0;
+    }
+    .promo .price{
+      position:static;
+      margin-top:auto;
+      padding-top:18px;
+      font-size:clamp(1.15rem,5vw,1.55rem);
+      line-height:1.05;
+      max-width:72%;
+    }
+    .promo .circle{
+      right:18px;
+      bottom:18px;
+      width:76px;
+      height:76px;
+      font-size:8px;
+    }
+  }
+
+  @media (max-width: 420px){
+    .promo,
+    .promo.main{
+      min-height:235px;
+      padding:20px;
+    }
+    .promo small{
+      font-size:8px;
+      letter-spacing:.12em;
+      line-height:1.35;
+    }
+    .promo h3,
+    .promo.main h3{
+      font-size:clamp(2rem,10.5vw,2.75rem);
+      line-height:.9;
+      margin-top:10px;
+    }
+    .promo p{
+      font-size:.82rem;
+      line-height:1.45;
+      max-width:78%;
+    }
+    .promo .price{
+      font-size:1.05rem;
+      max-width:68%;
+    }
+    .promo .circle{
+      width:68px;
+      height:68px;
+      right:14px;
+      bottom:14px;
+      font-size:7px;
+    }
+  }
+</style>
+
+
+<style id="premium-background-colors">
+  body {
+    background:
+      radial-gradient(circle at 8% 12%, rgba(231,141,167,.20), transparent 28%),
+      radial-gradient(circle at 92% 20%, rgba(247,223,155,.20), transparent 30%),
+      radial-gradient(circle at 78% 78%, rgba(196,59,61,.10), transparent 28%),
+      linear-gradient(135deg, #fffaf5 0%, #fff7f1 42%, #fdf2f5 100%);
+    background-attachment: fixed;
+  }
+  body.dark {
+    background:
+      radial-gradient(circle at 8% 12%, rgba(231,141,167,.12), transparent 28%),
+      radial-gradient(circle at 92% 20%, rgba(247,223,155,.10), transparent 30%),
+      radial-gradient(circle at 78% 78%, rgba(196,59,61,.08), transparent 28%),
+      linear-gradient(135deg, #090912 0%, #120d16 45%, #171019 100%);
+  }
+  main { position: relative; isolation: isolate; }
+  main::before, main::after {
+    content:""; position:absolute; pointer-events:none; z-index:-1; border-radius:50%; filter:blur(55px);
+  }
+  main::before { width:260px; height:260px; left:-110px; top:18%; background:rgba(231,141,167,.13); }
+  main::after { width:300px; height:300px; right:-130px; top:52%; background:rgba(247,223,155,.13); }
+  .section { position:relative; }
+  .section:nth-of-type(even) { background:linear-gradient(180deg, rgba(246,197,210,.055), rgba(255,255,255,0)); }
+  body.dark .section:nth-of-type(even) { background:linear-gradient(180deg, rgba(231,141,167,.035), rgba(0,0,0,0)); }
+  @media (max-width:700px){
+    body { background-attachment:scroll; }
+    main::before { width:180px; height:180px; left:-90px; }
+    main::after { width:200px; height:200px; right:-100px; }
+  }
+</style>
+
+<style id="pink-brand-theme-fix">
+  /* Stronger PrimeShot pink atmosphere */
+  body {
+    background:
+      radial-gradient(circle at 8% 8%, rgba(231,141,167,.34), transparent 30%),
+      radial-gradient(circle at 92% 18%, rgba(246,197,210,.42), transparent 32%),
+      radial-gradient(circle at 15% 78%, rgba(199,83,119,.18), transparent 28%),
+      radial-gradient(circle at 88% 82%, rgba(247,223,155,.20), transparent 26%),
+      linear-gradient(135deg, #fff8f3 0%, #fff0f4 45%, #fce5ed 100%) !important;
+    color: #24191d;
+  }
+  body::before {
+    background: rgba(231,141,167,.18) !important;
+  }
+  body::after {
+    background: rgba(196,59,61,.10) !important;
+  }
+  .section {
+    background: transparent !important;
+  }
+  .section:nth-of-type(even) {
+    background: linear-gradient(180deg, rgba(246,197,210,.16), rgba(255,248,243,.04)) !important;
+  }
+  .contacts-section {
+    background: linear-gradient(135deg, rgba(246,197,210,.42), rgba(255,248,243,.72)) !important;
+  }
+
+  /* Dark mode: lighter, warmer, and still visibly pink */
+  html[data-theme="dark"] body,
+  body.dark {
+    background:
+      radial-gradient(circle at 8% 8%, rgba(231,141,167,.28), transparent 31%),
+      radial-gradient(circle at 92% 18%, rgba(168,50,92,.25), transparent 34%),
+      radial-gradient(circle at 18% 82%, rgba(212,91,128,.18), transparent 29%),
+      radial-gradient(circle at 88% 78%, rgba(247,223,155,.10), transparent 25%),
+      linear-gradient(135deg, #24151d 0%, #301923 46%, #38202b 100%) !important;
+    color: #fff2f6 !important;
+  }
+  html[data-theme="dark"] .section,
+  body.dark .section {
+    background: transparent !important;
+    color: #fff2f6 !important;
+  }
+  html[data-theme="dark"] .section:nth-of-type(even),
+  body.dark .section:nth-of-type(even) {
+    background: linear-gradient(180deg, rgba(231,141,167,.09), rgba(48,25,35,.12)) !important;
+  }
+  html[data-theme="dark"] .contacts-section,
+  body.dark .contacts-section {
+    background: linear-gradient(135deg, rgba(89,36,55,.82), rgba(49,25,35,.92)) !important;
+  }
+
+  /* Dark-mode typography: consistent readable pink-white hierarchy */
+  html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3,
+  html[data-theme="dark"] h4, html[data-theme="dark"] h5, html[data-theme="dark"] h6,
+  body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 {
+    color: #fff2f6 !important;
+  }
+  html[data-theme="dark"] p, html[data-theme="dark"] li,
+  html[data-theme="dark"] .section-copy, html[data-theme="dark"] .muted,
+  body.dark p, body.dark li, body.dark .section-copy, body.dark .muted {
+    color: #e7c9d3 !important;
+  }
+  html[data-theme="dark"] .kicker, html[data-theme="dark"] .rate,
+  html[data-theme="dark"] .camera-status, html[data-theme="dark"] .gallery-caption span,
+  body.dark .kicker, body.dark .rate, body.dark .camera-status, body.dark .gallery-caption span {
+    color: #f08aaa !important;
+  }
+  html[data-theme="dark"] .links a, body.dark .links a {
+    color: #edcbd6 !important;
+  }
+  html[data-theme="dark"] .links a:hover, html[data-theme="dark"] .links a.active,
+  body.dark .links a:hover, body.dark .links a.active {
+    color: #fff2f6 !important;
+  }
+  html[data-theme="dark"] footer, body.dark footer {
+    color: #d7b8c4 !important;
+  }
+</style>
+
+<style id="prime-clean-theme">
+/* ===== PRIMESHOT — CLEAN PROFESSIONAL COLOR SYSTEM ===== */
+:root{
+  --ink:#351923;
+  --soft:#735b65;
+  --cream:#fff8fb;
+  --paper:#fffdfd;
+  --blush:#f9d9e4;
+  --rose:#e99ab4;
+  --berry:#a92f58;
+  --red:#c94b5a;
+  --line:#edd5de;
+  --yellow:#f6dfad;
+
+  --page-bg:
+    radial-gradient(circle at 8% 12%, rgba(233,154,180,.18), transparent 30%),
+    radial-gradient(circle at 92% 28%, rgba(249,217,228,.28), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(246,223,173,.14), transparent 36%),
+    #fff8fb;
+  --surface-bg:rgba(255,253,253,.88);
+  --surface-strong:#fffdfd;
+  --heading:#351923;
+  --body:#735b65;
+  --accent:#a92f58;
+  --accent-soft:#f3bfd0;
+  --nav-bg:rgba(255,253,253,.84);
+  --shadow:0 18px 55px rgba(115,55,78,.10);
+}
+
+body{
+  background:var(--page-bg) !important;
+  color:var(--body);
+  background-attachment:fixed;
+}
+
+body::before{
+  background:radial-gradient(circle,rgba(233,154,180,.18),transparent 68%) !important;
+}
+body::after{
+  background:radial-gradient(circle,rgba(246,223,173,.14),transparent 68%) !important;
+}
+
+h1,h2,h3,h4,h5,h6,
+.nav-links a,
+.logo-text,
+.dock-menu a{
+  color:var(--heading);
+}
+
+p,li,.section-intro{
+  color:var(--body);
+}
+
+header{
+  background:var(--nav-bg) !important;
+  border-color:rgba(237,213,222,.95) !important;
+  box-shadow:0 12px 38px rgba(115,55,78,.08) !important;
+}
+
+.service,.project,.tool-card,.skill-card,.experience-item,.highlight,.testimonial,.stats{
+  background:var(--surface-bg) !important;
+  border-color:var(--line) !important;
+  box-shadow:0 10px 35px rgba(115,55,78,.045);
+}
+
+.service:hover,.project:hover,.tool-card:hover,.skill-card:hover{
+  border-color:var(--rose) !important;
+  box-shadow:var(--shadow) !important;
+}
+
+.section{
+  border-color:rgba(237,213,222,.85);
+}
+
+.marquee{
+  background:rgba(249,217,228,.34) !important;
+  border-color:var(--line) !important;
+}
+
+.marquee span{
+  color:var(--berry) !important;
+}
+
+.section-label,.experience-year{
+  color:var(--berry) !important;
+}
+
+.button,
+.cta-box .btn{
+  background:var(--berry) !important;
+  border-color:var(--berry) !important;
+  color:#fff !important;
+}
+
+.button:hover,
+.cta-box .btn:hover{
+  background:var(--red) !important;
+  border-color:var(--red) !important;
+}
+
+.featured-card:first-child{
+  background:linear-gradient(135deg,#f8d4e0,#efb1c6) !important;
+  border-color:#edbfd0 !important;
+  color:#351923 !important;
+}
+.featured-card:nth-child(2){
+  background:linear-gradient(145deg,#8f284c,#c45d79) !important;
+}
+
+.contact{
+  background:linear-gradient(135deg,#a92f58,#c95d7a) !important;
+  box-shadow:0 22px 65px rgba(143,40,76,.18);
+}
+
+.contact p,.contact-copy p{
+  color:#fff0f5 !important;
+}
+
+.project-video{background:linear-gradient(135deg,#f8dce5,#edb4c8) !important}
+.project-design{background:linear-gradient(135deg,#fff0f4,#f1c8d6) !important}
+.project-social{background:linear-gradient(135deg,#f9e1e8,#eab4c8) !important}
+.project-branding{background:linear-gradient(135deg,#f5d3df,#e7a9c0) !important}
+
+body.dark{
+  --bg:#291b25;
+  --surface:#382430;
+  --text:#fff4f8;
+  --muted:#d7b8c4;
+  --line:#5a3949;
+  --accent:#f0a5bf;
+  --blue:#f0a5bf;
+  --blue-soft:#4a2c3a;
+
+  --page-bg:
+    radial-gradient(circle at 8% 12%,rgba(240,165,191,.20),transparent 30%),
+    radial-gradient(circle at 92% 25%,rgba(201,93,122,.17),transparent 32%),
+    radial-gradient(circle at 50% 100%,rgba(246,196,133,.08),transparent 34%),
+    #291b25;
+  --surface-bg:rgba(56,36,48,.90);
+  --surface-strong:#382430;
+  --heading:#fff4f8;
+  --body:#e4cbd5;
+  --accent:#f0a5bf;
+  --accent-soft:#704457;
+  --nav-bg:rgba(50,31,42,.88);
+  --shadow:0 20px 60px rgba(0,0,0,.22);
+}
+
+body.dark{
+  color:var(--body);
+  background:var(--page-bg) !important;
+  background-attachment:fixed;
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6,
+body.dark .nav-links a,
+body.dark .logo-text,
+body.dark .dock-menu a{
+  color:#fff4f8 !important;
+}
+
+body.dark p,
+body.dark li,
+body.dark .section-intro,
+body.dark .service p,
+body.dark .project-info p,
+body.dark .tool-card p,
+body.dark .experience-item p,
+body.dark .highlight span,
+body.dark .testimonial small{
+  color:#e4cbd5 !important;
+}
+
+body.dark header{
+  background:var(--nav-bg) !important;
+  border-color:#5a3949 !important;
+  box-shadow:0 12px 38px rgba(0,0,0,.24) !important;
+}
+
+body.dark .service,
+body.dark .project,
+body.dark .tool-card,
+body.dark .skill-card,
+body.dark .experience-item,
+body.dark .highlight,
+body.dark .testimonial,
+body.dark .stats{
+  background:var(--surface-bg) !important;
+  border-color:#5a3949 !important;
+  box-shadow:0 12px 38px rgba(0,0,0,.16);
+}
+
+body.dark .service:hover,
+body.dark .project:hover,
+body.dark .tool-card:hover,
+body.dark .skill-card:hover{
+  border-color:#c87895 !important;
+  box-shadow:0 20px 55px rgba(0,0,0,.25) !important;
+}
+
+body.dark .section{
+  border-color:#5a3949;
+}
+
+body.dark .marquee{
+  background:rgba(112,68,87,.28) !important;
+  border-color:#5a3949 !important;
+}
+
+body.dark .marquee span,
+body.dark .section-label,
+body.dark .experience-year{
+  color:#f0a5bf !important;
+}
+
+body.dark .button,
+body.dark .cta-box .btn{
+  background:#e99ab4 !important;
+  border-color:#e99ab4 !important;
+  color:#291b25 !important;
+}
+
+body.dark .button:hover,
+body.dark .cta-box .btn:hover{
+  background:#f3b6cb !important;
+  border-color:#f3b6cb !important;
+  color:#291b25 !important;
+}
+
+body.dark .featured-card:first-child{
+  background:linear-gradient(135deg,#704457,#a85d78) !important;
+  color:#fff4f8 !important;
+  border-color:#8f5a70 !important;
+}
+
+body.dark .featured-card:nth-child(2){
+  background:linear-gradient(145deg,#52263a,#8f4561) !important;
+}
+
+body.dark .contact{
+  background:linear-gradient(135deg,#672c45,#9b4b68) !important;
+  box-shadow:0 22px 65px rgba(0,0,0,.25);
+}
+
+body.dark .contact p,
+body.dark .contact-copy p{
+  color:#fff0f5 !important;
+}
+
+body.dark .project-video{background:linear-gradient(135deg,#593247,#8c5069) !important}
+body.dark .project-design{background:linear-gradient(135deg,#5b3548,#966178) !important}
+body.dark .project-social{background:linear-gradient(135deg,#563044,#8c4e68) !important}
+body.dark .project-branding{background:linear-gradient(135deg,#513041,#87536a) !important}
+
+body.dark .theme-toggle{
+  background:#4a2c3a !important;
+  color:#fff0f5 !important;
+  border-color:#704457 !important;
+}
+
+@media(max-width:700px){
+  body{
+    background-attachment:scroll;
+  }
+  .contact{
+    box-shadow:0 15px 40px rgba(143,40,76,.14);
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  body::before,body::after{animation:none !important}
+}
+</style>
+<style id="final-responsive-typography">
+/* ===== Final responsive typography + theme contrast ===== */
+:root{
+  --heading:#351923;
+  --body:#624d57;
+  --soft:#735b65;
+  --accent:#a92f58;
+  --line:#edd5de;
+}
+body{
+  color:var(--body) !important;
+}
+h1,h2,h3,h4,h5,h6,
+.logo-text,
+.nav-links a,
+.section-label,
+.hero-kicker,
+.project-info h3,
+.project-info p,
+.tools-group-head h3,
+.tools-group-head span,
+.service h3,
+.service p,
+.step h3,
+.step p,
+.fact strong,
+.fact p,
+.highlight strong,
+.highlight span,
+.testimonial p,
+.testimonial small{
+  color:var(--heading);
+}
+.hero-copy,
+.section-intro,
+.work-note,
+.marquee span,
+.tool-card p,
+.experience-item p,
+.inquiry-form label > span{
+  color:var(--body);
+}
+
+/* The tagline: "For the days you want memories you can hold." */
+.hero-kicker{
+  display:block !important;
+  width:min(100%, 620px);
+  max-width:620px;
+  margin-top:22px;
+  font-size:clamp(.82rem, 1.35vw, 1rem) !important;
+  line-height:1.45 !important;
+  letter-spacing:.01em;
+  white-space:normal !important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  text-wrap:balance;
+}
+
+/* Prevent oversized display text from colliding on narrow screens */
+.hero h1,
+.section-head h2,
+.contact h2,
+.featured-content h3{
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+
+.hero h1{
+  max-width:100%;
+  text-wrap:balance;
+}
+
+@media(max-width:700px){
+  .hero-kicker{
+    width:100%;
+    max-width:34rem;
+    font-size:.82rem !important;
+    line-height:1.5 !important;
+    letter-spacing:0 !important;
+    text-wrap:pretty;
+  }
+
+  .hero h1{
+    font-size:clamp(2.65rem, 13vw, 4.1rem) !important;
+    line-height:.96 !important;
+    letter-spacing:-.065em !important;
+  }
+
+  .section-head h2,
+  .contact h2{
+    font-size:clamp(2rem, 10vw, 3.4rem) !important;
+    line-height:1.02 !important;
+  }
+
+  .featured-content h3{
+    font-size:clamp(1.9rem, 9vw, 3.2rem) !important;
+    line-height:1 !important;
+  }
+}
+
+@media(max-width:380px){
+  .hero-kicker{
+    font-size:.78rem !important;
+    max-width:300px;
+  }
+
+  .hero h1{
+    font-size:clamp(2.35rem, 13.5vw, 3.2rem) !important;
+  }
+}
+
+/* Dark mode: every important text element becomes lighter */
+body.dark{
+  --heading:#fff5f8;
+  --body:#e4cbd5;
+  --soft:#d5b5c1;
+  --accent:#f0a5bf;
+  --line:#5a3949;
+  color:var(--body) !important;
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6,
+body.dark .logo-text,
+body.dark .nav-links a,
+body.dark .section-label,
+body.dark .hero-kicker,
+body.dark .project-info h3,
+body.dark .project-info p,
+body.dark .tools-group-head h3,
+body.dark .tools-group-head span,
+body.dark .service h3,
+body.dark .service p,
+body.dark .step h3,
+body.dark .step p,
+body.dark .fact strong,
+body.dark .fact p,
+body.dark .highlight strong,
+body.dark .highlight span,
+body.dark .testimonial p,
+body.dark .testimonial small,
+body.dark .hero-copy,
+body.dark .section-intro,
+body.dark .work-note,
+body.dark .marquee span,
+body.dark .tool-card p,
+body.dark .experience-item p{
+  color:var(--heading) !important;
+}
+
+body.dark .hero-copy,
+body.dark .section-intro,
+body.dark .work-note,
+body.dark .tool-card p,
+body.dark .experience-item p,
+body.dark .highlight span,
+body.dark .testimonial small{
+  color:var(--body) !important;
+}
+
+/* Keep labels/accents pink, not muddy */
+.section-label,
+.experience-year{
+  color:var(--accent) !important;
+}
+body.dark .section-label,
+body.dark .experience-year{
+  color:#f0a5bf !important;
+}
+
+/* Inputs and controls */
+.inquiry-form input,
+.inquiry-form select,
+.inquiry-form textarea{
+  color:var(--heading);
+}
+body.dark .inquiry-form input,
+body.dark .inquiry-form select,
+body.dark .inquiry-form textarea{
+  color:#fff5f8 !important;
+  border-color:#704457;
+  background:rgba(255,255,255,.06);
+}
+body.dark .inquiry-form input::placeholder,
+body.dark .inquiry-form textarea::placeholder{
+  color:#cfaeba !important;
+}
+</style>
+<style id="calendar-dark-month-fix">
+/* ===== Calendar dark-mode month header ===== */
+body.dark .calendar,
+body.dark #calendar,
+body.dark .calendar-wrap{
+  color:#fff;
+}
+
+body.dark .calendar .month,
+body.dark .calendar .month-title,
+body.dark .calendar .calendar-month,
+body.dark .calendar h3,
+body.dark .calendar h4,
+body.dark #calendar .month,
+body.dark #calendar .month-title,
+body.dark #calendar .calendar-month,
+body.dark #calendar h3,
+body.dark #calendar h4{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+
+body.dark .calendar button,
+body.dark .calendar .calendar-nav,
+body.dark .calendar .prev,
+body.dark .calendar .next{
+  color:#ffffff !important;
+}
+</style>
+<style id="light-mode-tagline-white-fix">
+body:not(.dark) .hero-kicker,
+body:not(.dark) .hero-kicker *{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+</style>
+
+<style id="promo-main-copy-white-fix">
+/* PrimeShot weekend promo copy — pure white in light mode */
+html:not([data-theme="dark"]) .promo.main p,
+body:not(.dark) .promo.main p{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  opacity:1 !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.08);
+}
+</style>
+
+<style id="calendar-month-dark-final">
+/* Force calendar month/year labels to pure white in dark mode */
+body.dark .calendar *:is(.month,.month-title,.calendar-month,.calendar-title,.month-name,.calendar-header),
+body.dark #calendar *:is(.month,.month-title,.calendar-month,.calendar-title,.month-name,.calendar-header),
+body.dark .calendar h2,
+body.dark .calendar h3,
+body.dark .calendar h4,
+body.dark #calendar h2,
+body.dark #calendar h3,
+body.dark #calendar h4,
+body.dark .calendar strong,
+body.dark #calendar strong {
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  opacity:1 !important;
+}
+</style>
+
+<style id="calendar-month-dark-real-fix">
+/* Actual PrimeShot calendar uses html[data-theme="dark"] + #monthLabel */
+html[data-theme="dark"] #calendar #monthLabel,
+html[data-theme="dark"] .booking-calendar-card #monthLabel,
+html[data-theme="dark"] .calendar-title#monthLabel {
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  text-shadow:none !important;
+  opacity:1 !important;
+}
+</style>
+<style id="scribble-dark-mode-fix">
+/* Make the hero "your memories look better in pink" text readable in dark mode */
+html[data-theme="dark"] .hero-copy .scribble,
+html[data-theme="dark"] .scribble {
+  color:#fff5f8 !important;
+  -webkit-text-fill-color:#fff5f8 !important;
+  text-shadow:none !important;
+  opacity:1 !important;
+}
+</style>
+
+<style id="hero-trip-birthday-dark-fix">
+/* Make the hero category line readable in dark mode */
+html[data-theme="dark"] .hero-copy:after {
+  color:#fff5f8 !important;
+  -webkit-text-fill-color:#fff5f8 !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+}
+</style>
+
+<style id="dark-pink-interior-fix">
+html[data-theme="dark"], body.dark {
+  --bg:#4a2638 !important;
+  --surface:#5b2f45 !important;
+  --text:#fff5f8 !important;
+  --muted:#f0c8d8 !important;
+  --line:#8b4b68 !important;
+  --accent:#ffb6d2 !important;
+}
+
+html[data-theme="dark"] body, body.dark {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255,166,201,.20), transparent 30%),
+    radial-gradient(circle at 85% 18%, rgba(255,210,225,.13), transparent 26%),
+    radial-gradient(circle at 50% 100%, rgba(194,92,135,.20), transparent 38%),
+    linear-gradient(180deg,#4a2638 0%,#512a3e 48%,#462337 100%) !important;
+  color:#fff5f8 !important;
+}
+
+html[data-theme="dark"] main,
+html[data-theme="dark"] section,
+html[data-theme="dark"] .section,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .surface,
+html[data-theme="dark"] .camera-card,
+html[data-theme="dark"] .calendar-wrap,
+html[data-theme="dark"] .calendar,
+body.dark main,
+body.dark section,
+body.dark .section,
+body.dark .card,
+body.dark .panel,
+body.dark .surface,
+body.dark .camera-card,
+body.dark .calendar-wrap,
+body.dark .calendar {
+  background-color:rgba(91,47,69,.94) !important;
+  border-color:#8b4b68 !important;
+}
+
+html[data-theme="dark"] .site-header,
+html[data-theme="dark"] header,
+body.dark .site-header,
+body.dark header {
+  background:rgba(74,38,56,.94) !important;
+  border-color:#8b4b68 !important;
+}
+
+html[data-theme="dark"] .contact,
+html[data-theme="dark"] .contact-box,
+body.dark .contact,
+body.dark .contact-box {
+  background:linear-gradient(135deg,#7b3555,#a04b70) !important;
+}
+
+html[data-theme="dark"] .hero,
+body.dark .hero {
+  background:linear-gradient(180deg,rgba(91,47,69,.35),rgba(74,38,56,.18)) !important;
+}
+</style>
+
+<style id="dark-camera-pick-section-fix">
+/* Keep PICK YOUR CAMERA consistent with the pink dark-mode interior */
+html[data-theme="dark"] .camera-availability,
+body.dark .camera-availability{
+  background:
+    radial-gradient(circle at 8% 18%, rgba(240,165,191,.14), transparent 30%),
+    radial-gradient(circle at 92% 76%, rgba(201,93,122,.12), transparent 34%),
+    #4b2638 !important;
+  color:#fff5f8 !important;
+}
+
+html[data-theme="dark"] .camera-availability .section-copy,
+body.dark .camera-availability .section-copy{
+  color:#f1d9e2 !important;
+}
+
+html[data-theme="dark"] .camera-availability .kicker,
+body.dark .camera-availability .kicker{
+  color:#f4aec5 !important;
+}
+
+html[data-theme="dark"] .camera-availability h2,
+body.dark .camera-availability h2,
+html[data-theme="dark"] .camera-availability .camera-name,
+body.dark .camera-availability .camera-name,
+html[data-theme="dark"] .camera-availability .camera-link,
+body.dark .camera-availability .camera-link{
+  color:#fff5f8 !important;
+}
+
+html[data-theme="dark"] .camera-availability .camera-index,
+body.dark .camera-availability .camera-index,
+html[data-theme="dark"] .camera-availability .camera-footnote,
+body.dark .camera-availability .camera-footnote{
+  color:#e8c9d5 !important;
+}
+
+html[data-theme="dark"] .camera-availability .camera-rail,
+body.dark .camera-availability .camera-rail{
+  border-color:rgba(240,165,191,.26) !important;
+}
+
+html[data-theme="dark"] .camera-availability .available-camera,
+body.dark .camera-availability .available-camera{
+  border-right-color:rgba(240,165,191,.20) !important;
+}
+
+html[data-theme="dark"] .camera-availability .camera-status,
+body.dark .camera-availability .camera-status{
+  color:#f0a5bf !important;
+}
+
+html[data-theme="dark"] .camera-availability .camera-link{
+  border-bottom-color:#f0a5bf !important;
+}
+
+html[data-theme="dark"] .camera-availability .camera-thumb{
+  box-shadow:0 10px 28px rgba(22,8,16,.20);
+}
+</style>
+
+<style id="pick-camera-final-pink-fix">
+/* Final dark-mode treatment for the Pick your camera section. */
+html[data-theme="dark"] #gear {
+  background:
+    radial-gradient(circle at 10% 15%, rgba(255,182,210,.16), transparent 32%),
+    radial-gradient(circle at 90% 80%, rgba(255,145,184,.12), transparent 36%),
+    linear-gradient(180deg, #4a2638 0%, #552b42 50%, #4b2639 100%) !important;
+  color:#fff5f8 !important;
+  border-color:#8b4b68 !important;
+}
+
+html[data-theme="dark"] #gear .section-head,
+html[data-theme="dark"] #gear .camera-rail,
+html[data-theme="dark"] #gear .camera-footnote {
+  background:transparent !important;
+}
+
+html[data-theme="dark"] #gear .camera-rail {
+  border-top-color:rgba(255,182,210,.28) !important;
+  border-bottom-color:rgba(255,182,210,.28) !important;
+}
+
+html[data-theme="dark"] #gear .available-camera {
+  background:rgba(93,49,72,.72) !important;
+  border-color:rgba(255,182,210,.20) !important;
+  box-shadow:0 14px 36px rgba(22,8,16,.20) !important;
+}
+
+html[data-theme="dark"] #gear .camera-thumb {
+  background:#5d3148 !important;
+}
+
+html[data-theme="dark"] #gear h2,
+html[data-theme="dark"] #gear .kicker,
+html[data-theme="dark"] #gear .section-copy,
+html[data-theme="dark"] #gear .camera-index,
+html[data-theme="dark"] #gear .camera-name,
+html[data-theme="dark"] #gear .camera-status,
+html[data-theme="dark"] #gear .camera-link,
+html[data-theme="dark"] #gear .camera-footnote {
+  color:#fff5f8 !important;
+  -webkit-text-fill-color:#fff5f8 !important;
+}
+
+html[data-theme="dark"] #gear .kicker,
+html[data-theme="dark"] #gear .camera-status {
+  color:#ffb6d2 !important;
+  -webkit-text-fill-color:#ffb6d2 !important;
+}
+
+html[data-theme="dark"] #gear .camera-link {
+  border-bottom-color:#ffb6d2 !important;
+}
+</style>
+
+
+<style id="pick-camera-light-pink-fix">
+/* Light-mode treatment for the Pick your camera section. */
+html[data-theme="light"] #gear {
+  background:
+    radial-gradient(circle at 10% 15%, rgba(255,180,207,.22), transparent 32%),
+    radial-gradient(circle at 90% 80%, rgba(248,151,182,.16), transparent 36%),
+    linear-gradient(180deg, #fff4f8 0%, #fce6ee 50%, #fff0f5 100%) !important;
+  color:#351923 !important;
+  border-color:#f0c8d6 !important;
+}
+
+html[data-theme="light"] #gear .section-head,
+html[data-theme="light"] #gear .camera-rail,
+html[data-theme="light"] #gear .camera-footnote {
+  background:transparent !important;
+}
+
+html[data-theme="light"] #gear .camera-rail {
+  border-top-color:rgba(169,47,88,.18) !important;
+  border-bottom-color:rgba(169,47,88,.18) !important;
+}
+
+html[data-theme="light"] #gear .available-camera {
+  background:rgba(255,255,255,.72) !important;
+  border-color:rgba(169,47,88,.16) !important;
+  box-shadow:0 14px 36px rgba(115,55,78,.10) !important;
+}
+
+html[data-theme="light"] #gear .camera-thumb {
+  background:#f9d9e4 !important;
+}
+
+html[data-theme="light"] #gear h2,
+html[data-theme="light"] #gear .kicker,
+html[data-theme="light"] #gear .section-copy,
+html[data-theme="light"] #gear .camera-index,
+html[data-theme="light"] #gear .camera-name,
+html[data-theme="light"] #gear .camera-status,
+html[data-theme="light"] #gear .camera-link,
+html[data-theme="light"] #gear .camera-footnote {
+  color:#351923 !important;
+  -webkit-text-fill-color:#351923 !important;
+}
+
+html[data-theme="light"] #gear .kicker,
+html[data-theme="light"] #gear .camera-status {
+  color:#a92f58 !important;
+  -webkit-text-fill-color:#a92f58 !important;
+}
+
+html[data-theme="light"] #gear .camera-link {
+  border-bottom-color:#d96b91 !important;
+}
+</style>
+
+
+<style id="light-pink-full-background">
+/* ===== LIGHT MODE — FULL PINK INTERIOR ===== */
+html[data-theme="light"] body{
+  background:
+    radial-gradient(circle at 8% 8%, rgba(255,255,255,.72), transparent 28%),
+    radial-gradient(circle at 92% 18%, rgba(244,177,201,.38), transparent 31%),
+    radial-gradient(circle at 50% 92%, rgba(249,206,220,.48), transparent 38%),
+    linear-gradient(180deg,#f8e4eb 0%,#f6dfe8 48%,#f8e7ed 100%) !important;
+  background-attachment:fixed !important;
+}
+
+html[data-theme="light"] nav{
+  background:rgba(255,243,247,.86) !important;
+}
+
+html[data-theme="light"] main,
+html[data-theme="light"] .hero,
+html[data-theme="light"] #gear,
+html[data-theme="light"] #shots,
+html[data-theme="light"] #calendar,
+html[data-theme="light"] #promos,
+html[data-theme="light"] #contact,
+html[data-theme="light"] footer{
+  background:transparent !important;
+}
+
+html[data-theme="light"] .hero{
+  background:
+    radial-gradient(circle at 78% 18%, rgba(250,195,212,.72) 0 11%, transparent 12%),
+    linear-gradient(120deg,rgba(255,248,251,.34) 0%,rgba(251,226,234,.22) 58%,rgba(244,194,211,.38) 100%) !important;
+}
+
+html[data-theme="light"] .camera-availability,
+html[data-theme="light"] .promos,
+html[data-theme="light"] .gallery-band,
+html[data-theme="light"] .availability,
+html[data-theme="light"] .contacts-section{
+  background:transparent !important;
+}
+
+html[data-theme="light"] .section:nth-of-type(even){
+  background:linear-gradient(180deg,rgba(244,177,201,.16),rgba(255,255,255,.04)) !important;
+}
+
+html[data-theme="light"] footer{
+  background:rgba(248,226,234,.58) !important;
+}
+</style>
+
+<style id="rental-rates-theme">
+.rental-rates{position:relative;overflow:hidden;background:linear-gradient(135deg,#f9dce5 0%,#fce9ef 48%,#f7d8e2 100%);color:#351923;border-top:1px solid rgba(169,47,88,.12);border-bottom:1px solid rgba(169,47,88,.12)}
+.rental-rates:before{content:"";position:absolute;inset:auto -100px -140px auto;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 68%);pointer-events:none}
+.rental-rates .section-copy{color:#624d57}
+.rental-rates .kicker{color:#a92f58}
+.rates-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.rate-card{position:relative;padding:24px;border:1px solid rgba(169,47,88,.18);border-radius:22px 7px 22px 7px;background:rgba(255,255,255,.62);box-shadow:0 18px 45px rgba(95,38,57,.08);backdrop-filter:blur(12px)}
+.rate-card.rate-featured{background:linear-gradient(145deg,rgba(255,245,249,.93),rgba(251,215,227,.86))}
+.rate-top{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#a92f58;font-size:10px;font-weight:900;letter-spacing:.12em}
+.rate-top b{font:11px Georgia,serif;color:#8c6f79}
+.rate-card h3{margin:12px 0 18px;font:700 clamp(1.4rem,2vw,2rem)/1.08 Georgia,serif;color:#351923}
+.rate-prices{display:grid;gap:8px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(169,47,88,.14)}
+.rate-prices div{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.rate-prices strong{font-size:1.15rem;color:#a92f58}
+.rate-prices span{font-size:.78rem;color:#735b65;text-align:right}
+.included-title{margin-bottom:8px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#624d57}
+.rate-card ul{margin:0;padding-left:18px;color:#624d57;font-size:.88rem;line-height:1.7}
+.rate-card li::marker{color:#c25578}
+.rate-note{margin:13px 0 0;color:#9b536c;font-size:.78rem;line-height:1.45;font-style:italic}
+
+html[data-theme="dark"] .rental-rates{background:linear-gradient(135deg,#4b2436 0%,#5d2942 50%,#472233 100%);color:#fff4f8;border-color:#6f3950}
+html[data-theme="dark"] .rental-rates .section-copy{color:#e4cbd5}
+html[data-theme="dark"] .rental-rates .kicker{color:#f0a5bf}
+html[data-theme="dark"] .rental-rates:before{background:radial-gradient(circle,rgba(240,165,191,.16) 0%,rgba(240,165,191,0) 68%)}
+html[data-theme="dark"] .rate-card{border-color:#714055;background:rgba(70,32,48,.84);box-shadow:0 18px 45px rgba(22,8,15,.18)}
+html[data-theme="dark"] .rate-card.rate-featured{background:linear-gradient(145deg,rgba(92,39,62,.96),rgba(105,45,70,.9))}
+html[data-theme="dark"] .rate-top{color:#f0a5bf}
+html[data-theme="dark"] .rate-top b{color:#d7b8c4}
+html[data-theme="dark"] .rate-card h3{color:#fff5f8}
+html[data-theme="dark"] .rate-prices{border-bottom-color:#714055}
+html[data-theme="dark"] .rate-prices strong{color:#f0a5bf}
+html[data-theme="dark"] .rate-prices span{color:#d7b8c4}
+html[data-theme="dark"] .included-title{color:#e4cbd5}
+html[data-theme="dark"] .rate-card ul{color:#ead4dc}
+html[data-theme="dark"] .rate-card li::marker{color:#f0a5bf}
+html[data-theme="dark"] .rate-note{color:#f0a5bf}
+
+@media(max-width:900px){.rates-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.rental-rates{padding:72px 0}.rates-grid{grid-template-columns:1fr}.rate-card{padding:20px}.rate-prices div{align-items:flex-start;flex-direction:column;gap:2px}.rate-prices span{text-align:left}}
+</style>
+
+
+<style id="rate-card-promo-match">
+/* Make every rental inclusions box use the same pink promo-card treatment. */
+.rates-grid .rate-card,
+.rates-grid .rate-card.rate-featured{
+  background:var(--blush) !important;
+  border:1px solid rgba(169,47,88,.18) !important;
+  color:var(--ink) !important;
+  box-shadow:0 18px 45px rgba(95,38,57,.08) !important;
+}
+.rates-grid .rate-card h3{color:var(--ink) !important}
+.rates-grid .rate-card .rate-top{color:var(--berry) !important}
+.rates-grid .rate-card .rate-top b{color:#8c6f79 !important}
+.rates-grid .rate-card .rate-prices strong{color:var(--berry) !important}
+.rates-grid .rate-card .rate-prices span,
+.rates-grid .rate-card .included-title,
+.rates-grid .rate-card ul{color:var(--soft) !important}
+.rates-grid .rate-card .rate-prices{border-bottom-color:rgba(169,47,88,.16) !important}
+.rates-grid .rate-card .rate-note{color:var(--berry) !important}
+
+html[data-theme="dark"] .rates-grid .rate-card,
+html[data-theme="dark"] .rates-grid .rate-card.rate-featured{
+  background:#5d2942 !important;
+  border-color:#714055 !important;
+  color:#fff4f8 !important;
+  box-shadow:0 18px 45px rgba(22,8,15,.18) !important;
+}
+html[data-theme="dark"] .rates-grid .rate-card h3{color:#fff5f8 !important}
+html[data-theme="dark"] .rates-grid .rate-card .rate-top{color:#f0a5bf !important}
+html[data-theme="dark"] .rates-grid .rate-card .rate-top b{color:#d7b8c4 !important}
+html[data-theme="dark"] .rates-grid .rate-card .rate-prices strong{color:#f0a5bf !important}
+html[data-theme="dark"] .rates-grid .rate-card .rate-prices span,
+html[data-theme="dark"] .rates-grid .rate-card .included-title,
+html[data-theme="dark"] .rates-grid .rate-card ul{color:#ead4dc !important}
+html[data-theme="dark"] .rates-grid .rate-card .rate-prices{border-bottom-color:#714055 !important}
+html[data-theme="dark"] .rates-grid .rate-card .rate-note{color:#f0a5bf !important}
+</style>
+
+<style id="rental-inclusions-light-box-fix">
+html:not([data-theme="dark"]) .rental-card,
+html:not([data-theme="dark"]) .rental-package,
+html:not([data-theme="dark"]) .rental-inclusions,
+html:not([data-theme="dark"]) .inclusions-box,
+html:not([data-theme="dark"]) .camera-rate-card,
+html:not([data-theme="dark"]) .rate-card {
+  background:#ffffff !important;
+  background-image:none !important;
+}
+</style>
+
+<style id="rental-rates-all-white-light">
+html:not([data-theme="dark"]) .rates-grid .rate-card,
+html:not([data-theme="dark"]) .rates-grid .rate-card.rate-featured{
+  background:#ffffff !important;
+  background-image:none !important;
+  color:#24191d !important;
+  border-color:#ead7dc !important;
+}
+</style>
+
+
+<style id="light-mode-promos-white">
+/* PRIMESHOT — keep all promo cards white in light mode */
+html:not([data-theme="dark"]) .promos .promo,
+html:not([data-theme="dark"]) .promos .promo.main,
+html:not([data-theme="dark"]) .promo-wall .promo {
+  background:#ffffff !important;
+  color:var(--ink) !important;
+  border-color:var(--line) !important;
+}
+html:not([data-theme="dark"]) .promos .promo p,
+html:not([data-theme="dark"]) .promos .promo small,
+html:not([data-theme="dark"]) .promos .promo .price {
+  color:var(--ink) !important;
+}
+</style>
+
+
+<style id="dark-mode-promos-one-color">
+/* PRIMESHOT — all promo cards use one consistent color in dark mode */
+html[data-theme="dark"] .promos .promo,
+html[data-theme="dark"] .promos .promo.main,
+html[data-theme="dark"] .promo-wall .promo {
+  background:#5a2a3d !important;
+  background-image:none !important;
+  color:#fff5f8 !important;
+  border-color:#7a3b55 !important;
+}
+html[data-theme="dark"] .promos .promo p,
+html[data-theme="dark"] .promos .promo small,
+html[data-theme="dark"] .promos .promo .price,
+html[data-theme="dark"] .promos .promo h3 {
+  color:#fff5f8 !important;
+}
+</style>
+
+<style id="light-promo-circle-fix">
+html:not([data-theme="dark"]) .promo .circle{
+  background:#e78da7 !important;
+  color:#ffffff !important;
+  border:1px solid rgba(158,41,76,.16);
+  box-shadow:0 10px 24px rgba(158,41,76,.16);
+}
+</style>
+
 </head>
 <body>
 
@@ -1359,6 +3028,7 @@ html:not([data-theme="dark"]) {
       <a href="#gear">Cameras</a>
       <a href="#shots">Client Shots</a>
       <a href="#calendar">Availability</a>
+      <a href="#rates">Rates</a>
       <a href="#promos">Promos</a>
       <a href="#contact">Contact</a>
     </div>
@@ -1367,10 +3037,12 @@ html:not([data-theme="dark"]) {
         <span class="theme-icon" aria-hidden="true">☾</span>
         <span class="theme-label">Dark</span>
       </button>
-      <a class="nav-cta" href="#calendar">Check dates</a>
+      
     </div>
   </div>
 </nav>
+
+
 
 <main>
 <section class="hero">
@@ -1395,7 +3067,7 @@ html:not([data-theme="dark"]) {
         <div class="kicker">The current shelf</div>
         <h2>Pick your<br>camera.</h2>
       </div>
-      <div class="section-copy"> The cards below use the actual camera thumbnails from your screenshot.</div>
+      
     </div>
     <div class="camera-rail">
       <article class="available-camera">
@@ -1453,7 +3125,7 @@ html:not([data-theme="dark"]) {
 
     <div class="camera-gallery-sections">
       <article class="camera-gallery-section">
-        <div class="camera-gallery-heading"><span>01</span><h3>Nikon A100 Gallery</h3><p>Photos uploading soon.</p></div>
+        <div class="camera-gallery-heading"><h3>Nikon A100 Gallery</h3><p>Photos uploading soon.</p></div>
         <div class="camera-frame-grid">
           <div class="camera-frame-card">
             <div class="camera-frame-photo"><div class="frame-uploading">UPLOADING SOON</div></div>
@@ -1470,7 +3142,7 @@ html:not([data-theme="dark"]) {
         </div>
       </article>
       <article class="camera-gallery-section">
-        <div class="camera-gallery-heading"><span>02</span><h3>Insta360 Go Ultra Gallery</h3><p>Photos uploading soon.</p></div>
+        <div class="camera-gallery-heading"><h3>Insta360 Go Ultra Gallery</h3><p>Photos uploading soon.</p></div>
         <div class="camera-frame-grid">
           <div class="camera-frame-card">
             <div class="camera-frame-photo"><div class="frame-uploading">UPLOADING SOON</div></div>
@@ -1487,7 +3159,7 @@ html:not([data-theme="dark"]) {
         </div>
       </article>
       <article class="camera-gallery-section">
-        <div class="camera-gallery-heading"><span>03</span><h3>Canon Powershot Gallery</h3><p>Photos uploading soon.</p></div>
+        <div class="camera-gallery-heading"><h3>Canon Powershot Gallery</h3><p>Photos uploading soon.</p></div>
         <div class="camera-frame-grid">
           <div class="camera-frame-card">
             <div class="camera-frame-photo"><div class="frame-uploading">UPLOADING SOON</div></div>
@@ -1504,7 +3176,7 @@ html:not([data-theme="dark"]) {
         </div>
       </article>
       <article class="camera-gallery-section">
-        <div class="camera-gallery-heading"><span>04</span><h3>Instax Mini Evo Gallery</h3><p>Photos uploading soon.</p></div>
+        <div class="camera-gallery-heading"><h3>Instax Mini Evo Gallery</h3><p>Photos uploading soon.</p></div>
         <div class="camera-frame-grid">
           <div class="camera-frame-card">
             <div class="camera-frame-photo"><div class="frame-uploading">UPLOADING SOON</div></div>
@@ -1521,7 +3193,7 @@ html:not([data-theme="dark"]) {
         </div>
       </article>
       <article class="camera-gallery-section">
-        <div class="camera-gallery-heading"><span>05</span><h3>Sony Cybershot Gallery</h3><p>Photos uploading soon.</p></div>
+        <div class="camera-gallery-heading"><h3>Sony Cybershot Gallery</h3><p>Photos uploading soon.</p></div>
         <div class="camera-frame-grid">
           <div class="camera-frame-card">
             <div class="camera-frame-photo"><div class="frame-uploading">UPLOADING SOON</div></div>
@@ -1536,6 +3208,122 @@ html:not([data-theme="dark"]) {
             <div class="camera-frame-meta"><span>SONY CYBERSHOT</span><b>03</b></div>
           </div>
         </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<section id="rates" class="rental-rates">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker">CLEAR, SIMPLE PRICING</div>
+        <h2>Rental rates<br>&amp; inclusions.</h2>
+      </div>
+      <div class="section-copy">Choose your camera, check the rental length, and see exactly what comes with each package.</div>
+    </div>
+
+    <div class="rates-grid">
+      <article class="rate-card rate-featured">
+        <div class="rate-top"><span>CREATOR BUNDLE</span><b>01</b></div>
+        <h3>Insta360 Go Ultra</h3>
+        <div class="rate-prices">
+          <div><strong>₱499</strong><span>/ day · 1–3 days</span></div>
+          <div><strong>₱449</strong><span>/ day · 4 days and up</span></div>
+        </div>
+        <div class="included-title">This includes:</div>
+        <ul>
+          <li>Magnetic pendant</li>
+          <li>Magnetic easy clip</li>
+          <li>Mini tripod</li>
+          <li>Bettery and USB cable</li>
+          <li>Pivot stand</li>
+          <li>Quick release mount</li>
+          <li>256 GB SD card</li>
+        </ul>
+      </article>
+
+      <article class="rate-card">
+        <div class="rate-top"><span>COMPACT PICK</span><b>02</b></div>
+        <h3>Canon Powershot A2600</h3>
+        <div class="rate-prices">
+          <div><strong>₱200</strong><span>/ day · 1–4 days</span></div>
+          <div><strong>₱180</strong><span>/ day · 5 days and up</span></div>
+        </div>
+        <div class="included-title">This includes:</div>
+        <ul>
+          <li>16GB card</li>
+          <li>SD card reader</li>
+          <li>Charge</li>
+          <li>Camera case</li>
+        </ul>
+      </article>
+
+      <article class="rate-card">
+        <div class="rate-top"><span>COMPACT PICK</span><b>03</b></div>
+        <h3>Nikon Coolpix A300</h3>
+        <div class="rate-prices">
+          <div><strong>₱200</strong><span>/ day · 1–4 days</span></div>
+          <div><strong>₱180</strong><span>/ day · 5 days and up</span></div>
+        </div>
+        <div class="included-title">This includes:</div>
+        <ul>
+          <li>16GB card</li>
+          <li>SD card reader</li>
+          <li>Charge</li>
+          <li>Camera case</li>
+        </ul>
+      </article>
+
+      <article class="rate-card rate-featured">
+        <div class="rate-top"><span>INSTANT FAVORITE</span><b>04</b></div>
+        <h3>Instax Mini Evo</h3>
+        <div class="rate-prices">
+          <div><strong>₱400</strong><span>/ day · 1–3 days</span></div>
+          <div><strong>₱350</strong><span>/ day · 4 days and up</span></div>
+        </div>
+        <div class="included-title">This includes:</div>
+        <ul>
+          <li>32GB card</li>
+          <li>SD card reader</li>
+          <li>Charge</li>
+          <li>Camera case</li>
+          <li>Leather bag and strap</li>
+        </ul>
+        <p class="rate-note">*Instax Mini film not included in this package.</p>
+      </article>
+
+      <article class="rate-card">
+        <div class="rate-top"><span>EVERYDAY PICK</span><b>05</b></div>
+        <h3>Nikon Coolpix A100</h3>
+        <div class="rate-prices">
+          <div><strong>₱200</strong><span>/ day · 1–4 days</span></div>
+          <div><strong>₱180</strong><span>/ day · 5 days and up</span></div>
+        </div>
+        <div class="included-title">This includes:</div>
+        <ul>
+          <li>16GB card</li>
+          <li>SD card reader</li>
+          <li>Charge</li>
+          <li>Camera case</li>
+        </ul>
+      </article>
+
+      <article class="rate-card">
+        <div class="rate-top"><span>POCKET FAVORITE</span><b>06</b></div>
+        <h3>Sony Cybershot DSC-120</h3>
+        <div class="rate-prices">
+          <div><strong>₱200</strong><span>/ day · 1–4 days</span></div>
+          <div><strong>₱180</strong><span>/ day · 5 days and up</span></div>
+        </div>
+        <div class="included-title">This includes:</div>
+        <ul>
+          <li>16GB card</li>
+          <li>SD card reader</li>
+          <li>Charge</li>
+          <li>Camera case</li>
+        </ul>
       </article>
     </div>
   </div>
@@ -1593,11 +3381,12 @@ html:not([data-theme="dark"]) {
 
         <label>CAMERA
           <select id="bookingCamera">
-            <option>Nikon A100</option>
-            <option>Insta360 Go Ultra</option>
-            <option>Canon Powershot</option>
+            <option>Nikon Coolpix A100</option>
+            <option>Insta360 Go Ultra (Creator Bundle)</option>
+            <option>Canon Powershot A2600</option>
+            <option>Nikon Coolpix A300</option>
             <option>Instax Mini Evo</option>
-            <option>Sony Cybershot</option>
+            <option>Sony Cybershot DSC-120</option>
           </select>
         </label>
 
@@ -1658,7 +3447,55 @@ html:not([data-theme="dark"]) {
 </section>
 
 
+
+<section id="contact" class="contacts-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker">LET'S CONNECT</div>
+        <h2>Questions?<br>Let's talk.</h2>
+      </div>
+      <div class="section-copy">
+        Need help choosing a camera, checking a date, or asking about a rental?
+        Send PRIMESHOT RENTALS a message and we'll help you figure it out.
+      </div>
+    </div>
+
+    <div class="contacts-grid">
+      <div class="contact-main">
+        <div class="kicker">PRIMESHOT RENTALS</div>
+        <h2>Make your next<br>memory count.</h2>
+        <p>
+          For rental questions, camera recommendations, availability, or special requests,
+          reach out through Instagram, Facebook, or email. You can also check your preferred dates first.
+        </p>
+        <div class="contact-actions">
+          <a href="https://www.instagram.com/primeshotrentals/" target="_blank" rel="noopener">Instagram ↗</a>
+          <a href="https://www.facebook.com/profile.php?id=61588093259275" target="_blank" rel="noopener">Facebook ↗</a>
+          <a href="mailto:primeshotrentals@gmail.com" aria-label="Email PRIMESHOT RENTALS at primeshotrentals@gmail.com">Email us ↗</a>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
 </main>
+
+
+<div class="gallery-viewer" id="galleryViewer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Gallery preview">
+  <div class="gallery-viewer-panel">
+    <div class="gallery-viewer-media" id="galleryViewerMedia"></div>
+    <div class="gallery-viewer-info">
+      <div>
+        <h3 class="gallery-viewer-title" id="galleryViewerTitle">Camera Gallery</h3>
+        <p class="gallery-viewer-meta" id="galleryViewerMeta">PRIMESHOT RENTALS</p>
+      </div>
+      <button class="gallery-viewer-close" id="galleryViewerClose" type="button" aria-label="Close gallery preview">×</button>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="wrap footer-inner">
@@ -1811,5 +3648,101 @@ html:not([data-theme="dark"]) {
 })();
 
 </script>
+
+<script id="primeshot-interaction-upgrade">
+(function(){
+  /* Instagram-style long-press / tap gallery viewer */
+  const viewer=document.getElementById('galleryViewer');
+  const viewerMedia=document.getElementById('galleryViewerMedia');
+  const viewerTitle=document.getElementById('galleryViewerTitle');
+  const viewerMeta=document.getElementById('galleryViewerMeta');
+  const viewerClose=document.getElementById('galleryViewerClose');
+  let pressTimer=null;
+  let longPressed=false;
+  let activeCard=null;
+
+  function openViewer(card){
+    if(!viewer || !card) return;
+    activeCard=card;
+    const title=card.closest('.camera-gallery-section')?.querySelector('.camera-gallery-heading h3')?.textContent || 'Camera Gallery';
+    const name=card.querySelector('.camera-frame-meta span')?.textContent || 'PRIMESHOT RENTALS';
+    const number=card.querySelector('.camera-frame-meta b')?.textContent || '';
+    const sourceImg=card.querySelector('.camera-frame-photo img');
+
+    viewerTitle.textContent=title;
+    viewerMeta.textContent=(name+(number?' · PHOTO '+number:'' )).toUpperCase();
+    viewerMedia.innerHTML='';
+
+    if(sourceImg && sourceImg.src){
+      const img=document.createElement('img');
+      img.src=sourceImg.currentSrc || sourceImg.src;
+      img.alt=sourceImg.alt || name;
+      viewerMedia.appendChild(img);
+    }else{
+      const placeholder=document.createElement('div');
+      placeholder.className='gallery-viewer-placeholder';
+      placeholder.innerHTML='<div>PHOTOS ARE<br>UPLOADING SOON ♡</div>';
+      viewerMedia.appendChild(placeholder);
+    }
+
+    viewer.classList.add('open');
+    viewer.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+
+  function closeViewer(){
+    if(!viewer) return;
+    viewer.classList.remove('open');
+    viewer.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    activeCard=null;
+  }
+
+  document.querySelectorAll('.camera-frame-card').forEach(card=>{
+    const startPress=(e)=>{
+      if(e.type==='mousedown' && e.button!==0) return;
+      clearTimeout(pressTimer);
+      longPressed=false;
+      pressTimer=setTimeout(()=>{
+        longPressed=true;
+        openViewer(card);
+      },450);
+    };
+
+    const cancelPress=()=>{
+      clearTimeout(pressTimer);
+      pressTimer=null;
+    };
+
+    const finishPress=(e)=>{
+      const wasLong=longPressed;
+      cancelPress();
+      if(!wasLong && e.type==='click') openViewer(card);
+    };
+
+    card.addEventListener('pointerdown',startPress);
+    card.addEventListener('pointerup',finishPress);
+    card.addEventListener('pointercancel',cancelPress);
+    card.addEventListener('pointerleave',cancelPress);
+    card.addEventListener('contextmenu',e=>e.preventDefault());
+  });
+
+  viewerClose?.addEventListener('click',closeViewer);
+  viewer?.addEventListener('click',e=>{
+    if(e.target===viewer) closeViewer();
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape') closeViewer();
+  });
+
+  /* Make buttons feel responsive on touch as well */
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('pointerdown',()=>el.classList.add('is-pressing'),{passive:true});
+    el.addEventListener('pointerup',()=>el.classList.remove('is-pressing'),{passive:true});
+    el.addEventListener('pointercancel',()=>el.classList.remove('is-pressing'),{passive:true});
+  });
+})();
+</script>
+
 </body>
 </html>
