@@ -1768,6 +1768,31 @@ button,a,.gear-card,.available-camera,.camera-frame-card,.promo,.contact-card,
 </style>
 
 
+<style id="live-calendar-booking-states">
+.booking-calendar-card .day.camera-unavailable{
+  opacity:.62!important;
+  cursor:not-allowed!important;
+  background:#f3e5e8!important;
+  border-color:#d8b8c1!important;
+}
+.booking-calendar-card .day.camera-unavailable:hover{
+  transform:none!important;
+  box-shadow:none!important;
+}
+.booking-calendar-card .day.selected{
+  outline:2px solid var(--berry)!important;
+  outline-offset:-2px;
+}
+html[data-theme="dark"] .booking-calendar-card .day.camera-unavailable{
+  background:rgba(212,91,128,.14)!important;
+  border-color:rgba(212,91,128,.35)!important;
+  opacity:.72!important;
+}
+html[data-theme="dark"] .booking-calendar-card .day.selected{
+  outline-color:#f0a8bd!important;
+}
+</style>
+
 <style id="calendar-dark-date-fix">
 html[data-theme="dark"] .booking-calendar-card .day,
 html[data-theme="dark"] .booking-calendar-card .day .day-number,
@@ -3835,6 +3860,13 @@ html{scroll-behavior:auto;}
   }
 }
 </style>
+<style id="pick-camera-inquire-only">
+/* Pick Your Camera: only the Inquire link is interactive. */
+#gear .available-camera{cursor:default !important;transform:none !important;}
+#gear .available-camera:hover{transform:none !important;box-shadow:none !important;}
+#gear .available-camera:hover .camera-thumb{transform:none !important;box-shadow:none !important;}
+#gear .available-camera .camera-link{cursor:pointer !important;}
+</style>
 </head>
 <body>
 
@@ -4430,25 +4462,113 @@ html{scroll-behavior:auto;}
   </div>
 </footer>
 
-<script>
+<script id="primeshot-live-calendar">
 (function(){
   const daysEl=document.getElementById('calendarDays');
   const label=document.getElementById('monthLabel');
   const prev=document.getElementById('prevMonth');
   const next=document.getElementById('nextMonth');
+  const cameraSelect=document.getElementById('bookingCamera');
+  const rentalInput=document.getElementById('bookingDate');
+  const returnInput=document.getElementById('bookingReturnDate');
+  const selectedText=document.getElementById('selectedDateText');
+  if(!daysEl||!label) return;
 
+  const GOOGLE_SHEETS_WEB_APP='https://script.google.com/macros/s/AKfycbwCq8abnrdSaLgFj5-jj3WLpDe63q7gH263CRVMJL-AgXfW-e0N6gFHrLxvydnEgzI/exec';
   const today=new Date();
+  today.setHours(0,0,0,0);
   let viewYear=today.getFullYear();
   let viewMonth=today.getMonth();
-  const key='primeshot-booked-dates-v1';
-
-  let booked={};
-  try{ booked=JSON.parse(localStorage.getItem(key)||'{}')||{}; }catch(e){ booked={}; }
-
-  function save(){ localStorage.setItem(key,JSON.stringify(booked)); }
+  let approvedBookings=[];
+  let selectedCamera=cameraSelect?.value || '';
 
   function dateKey(y,m,d){
     return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+  }
+
+  function parseDate(value){
+    if(!value) return null;
+    const d=new Date(String(value).slice(0,10)+'T00:00:00');
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function formatDate(value){
+    const d=parseDate(value);
+    if(!d) return value || '';
+    return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(d);
+  }
+
+  function dateRangeOverlaps(date,start,end){
+    return date>=start && date<=end;
+  }
+
+  function bookingsForDate(key){
+    const d=parseDate(key);
+    if(!d) return [];
+    return approvedBookings.filter(b=>{
+      const start=parseDate(b.start), end=parseDate(b.end);
+      return start && end && dateRangeOverlaps(d,start,end);
+    });
+  }
+
+  function cameraBookedOn(key,camera){
+    return bookingsForDate(key).some(b=>b.camera===camera);
+  }
+
+  function availabilityForDate(key){
+    const bookings=bookingsForDate(key);
+    const cameras=new Set(bookings.map(b=>b.camera));
+    const totalCameras=6;
+    if(cameras.size>=totalCameras) return 'full';
+    if(cameras.size>0) return 'limited';
+    return 'available';
+  }
+
+  function getSelectedRangeConflict(){
+    const camera=cameraSelect?.value || '';
+    const start=parseDate(rentalInput?.value);
+    const end=parseDate(returnInput?.value || rentalInput?.value);
+    if(!camera||!start||!end||end<start) return null;
+    const d=new Date(start);
+    while(d<=end){
+      const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      if(cameraBookedOn(key,camera)) return key;
+      d.setDate(d.getDate()+1);
+    }
+    return null;
+  }
+
+  function updateSelectedText(){
+    if(!selectedText) return;
+    const camera=cameraSelect?.value || 'your selected camera';
+    const start=rentalInput?.value;
+    const end=returnInput?.value;
+    if(start && end){
+      const conflict=getSelectedRangeConflict();
+      if(conflict){
+        selectedText.textContent=camera+' is already booked on '+formatDate(conflict)+'. Please choose another date or camera.';
+      }else{
+        selectedText.textContent='Requesting '+camera+' from '+formatDate(start)+' to '+formatDate(end)+'.';
+      }
+    }else if(start){
+      const conflict=cameraBookedOn(start,camera);
+      selectedText.textContent=conflict
+        ? camera+' is already booked on '+formatDate(start)+'. Please choose another date or camera.'
+        : camera+' is available on '+formatDate(start)+'. Select your return date.';
+    }else{
+      selectedText.textContent='Select your preferred rental date from the calendar.';
+    }
+  }
+
+  function selectDate(key){
+    if(selectedCamera && cameraBookedOn(key,selectedCamera)){
+      alert(selectedCamera+' is already booked on '+formatDate(key)+'. Please choose another date or camera.');
+      return;
+    }
+    if(rentalInput) rentalInput.value=key;
+    if(returnInput && (!returnInput.value || returnInput.value<key)) returnInput.value=key;
+    updateSelectedText();
+    render();
   }
 
   function render(){
@@ -4468,39 +4588,87 @@ html{scroll-behavior:auto;}
     for(let d=1;d<=total;d++){
       const el=document.createElement('button');
       el.type='button';
-      el.className='day';
       const k=dateKey(viewYear,viewMonth,d);
-      if(booked[k]) el.classList.add('booked');
-
+      const status=availabilityForDate(k);
+      const cameraUnavailable=selectedCamera && cameraBookedOn(k,selectedCamera);
+      const isSelected=k===rentalInput?.value;
       const isToday=viewYear===today.getFullYear() && viewMonth===today.getMonth() && d===today.getDate();
+
+      el.className='day '+status;
+      if(cameraUnavailable) el.classList.add('camera-unavailable');
+      if(isSelected) el.classList.add('selected');
       if(isToday) el.classList.add('today');
+      if(cameraUnavailable) el.setAttribute('aria-disabled','true');
 
-      el.innerHTML='<span class="day-number">'+d+'</span>';
-      el.title=booked[k]?'Fully booked — click to mark available':'Available — click to mark fully booked';
+      const labelText=cameraUnavailable
+        ? 'BOOKED FOR CAMERA'
+        : status==='full' ? 'FULL'
+        : status==='limited' ? 'LIMITED'
+        : 'AVAILABLE';
+      el.innerHTML='<span class="day-number">'+d+'</span><span class="availability-label">'+labelText+'</span>';
+      el.title=cameraUnavailable
+        ? selectedCamera+' is booked on this date'
+        : status==='full' ? 'All cameras are booked on this date'
+        : status==='limited' ? 'Some cameras are booked on this date'
+        : 'Available for rental requests';
 
-      el.addEventListener('click',()=>{
-        if(booked[k]) delete booked[k]; else booked[k]=true;
-        save();
-        render();
-      });
+      el.addEventListener('click',()=>selectDate(k));
       daysEl.appendChild(el);
     }
   }
 
-  prev.addEventListener('click',()=>{
+  function loadAvailability(){
+    const callbackName='primeShotAvailability_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const script=document.createElement('script');
+    const cleanup=()=>{
+      delete window[callbackName];
+      script.remove();
+    };
+    window[callbackName]=function(data){
+      if(data && data.success && Array.isArray(data.bookings)){
+        approvedBookings=data.bookings;
+      }else{
+        approvedBookings=[];
+      }
+      cleanup();
+      render();
+      updateSelectedText();
+    };
+    script.onerror=function(){
+      cleanup();
+      approvedBookings=[];
+      render();
+    };
+    script.src=GOOGLE_SHEETS_WEB_APP+'?action=availability&callback='+encodeURIComponent(callbackName)+'&_='+Date.now();
+    document.body.appendChild(script);
+  }
+
+  prev?.addEventListener('click',()=>{
     viewMonth--;
     if(viewMonth<0){viewMonth=11;viewYear--;}
     render();
   });
 
-  next.addEventListener('click',()=>{
+  next?.addEventListener('click',()=>{
     viewMonth++;
     if(viewMonth>11){viewMonth=0;viewYear++;}
     render();
   });
 
+  cameraSelect?.addEventListener('change',()=>{
+    selectedCamera=cameraSelect.value;
+    render();
+    updateSelectedText();
+  });
+  rentalInput?.addEventListener('change',updateSelectedText);
+  returnInput?.addEventListener('change',updateSelectedText);
+
   render();
+  loadAvailability();
+  // Refresh approved bookings periodically so the calendar reflects admin changes.
+  setInterval(loadAvailability,60000);
 })();
+
 
 /* Modern theme + interaction layer */
 (function(){
@@ -4671,39 +4839,89 @@ html{scroll-behavior:auto;}
 </script>
 
 
-<script id="primeshot-booking-email">
+<iframe id="primeShotSheetsFrame" name="primeShotSheetsFrame" title="Google Sheets submission" aria-hidden="true" style="position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none;"></iframe>
+
+<script id="primeshot-booking-google-sheets">
 (function(){
   const submit=document.getElementById('bookingSubmit');
   if(!submit) return;
 
-  submit.addEventListener('click',function(){
+  const GOOGLE_SHEETS_WEB_APP='https://script.google.com/macros/s/AKfycbwCq8abnrdSaLgFj5-jj3WLpDe63q7gH263CRVMJL-AgXfW-e0N6gFHrLxvydnEgzI/exec';
+  let sending=false;
+
+  submit.addEventListener('click',function(e){
+    e.preventDefault();
+    if(sending) return;
+
     const camera=document.getElementById('bookingCamera')?.value || '';
     const rentalDate=document.getElementById('bookingDate')?.value || '';
     const returnDate=document.getElementById('bookingReturnDate')?.value || '';
     const name=document.getElementById('bookingName')?.value.trim() || '';
     const contact=document.getElementById('bookingContact')?.value.trim() || '';
 
-    if(!rentalDate || !returnDate || !name || !contact){
-      alert('Please fill in your rental date, return date, name, and mobile/email before sending your request.');
+    if(!camera || !rentalDate || !returnDate || !name || !contact){
+      alert('Please fill in your camera, rental date, return date, name, and mobile/email before sending your request.');
       return;
     }
 
-    const subject='PRIMESHOT RENTALS — Rental Request';
-    const body=[
-      'Hello PRIMESHOT RENTALS,',
-      '',
-      'I would like to request a camera rental.',
-      '',
-      'Camera: '+camera,
-      'Rental Date: '+rentalDate,
-      'Return Date: '+returnDate,
-      'Name: '+name,
-      'Mobile / Email: '+contact,
-      '',
-      'Please let me know if the camera is available for these dates. Thank you!'
-    ].join('\n');
+    const start=new Date(rentalDate+'T00:00:00');
+    const end=new Date(returnDate+'T00:00:00');
+    if(Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())){
+      alert('Please select valid rental and return dates.');
+      return;
+    }
+    if(end < start){
+      alert('Your return date cannot be earlier than your rental date.');
+      return;
+    }
 
-    window.location.href='mailto:primeshotrentals@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+    sending=true;
+    const originalText=submit.textContent;
+    submit.disabled=true;
+    submit.textContent='SENDING REQUEST…';
+
+    // Use a real cross-origin HTML form submission rather than fetch().
+    // This avoids browser CORS/preflight issues with Google Apps Script.
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=GOOGLE_SHEETS_WEB_APP;
+    form.target='primeShotSheetsFrame';
+    form.style.display='none';
+
+    const fields={
+      Timestamp:new Date().toISOString(),
+      Camera:camera,
+      'Rental Date':rentalDate,
+      'Return Date':returnDate,
+      'Customer Name':name,
+      Contact:contact,
+      Status:'Pending'
+    };
+
+    Object.entries(fields).forEach(([key,value])=>{
+      const input=document.createElement('input');
+      input.type='hidden';
+      input.name=key;
+      input.value=value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    form.remove();
+
+    // Google Apps Script receives the request in the background iframe.
+    // Give the browser a moment to hand off the request before confirming.
+    setTimeout(()=>{
+      alert('Your rental request has been sent successfully! PrimeShot Rentals will review your dates and contact you soon.');
+      ['bookingDate','bookingReturnDate','bookingName','bookingContact'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.value='';
+      });
+      sending=false;
+      submit.disabled=false;
+      submit.textContent=originalText;
+    },900);
   });
 })();
 </script>
@@ -4778,7 +4996,7 @@ html[data-theme="dark"] #camera-match .match-question button.active, body.dark #
 .ps-modal.open{display:grid}
 .ps-modal-card{width:min(560px,100%);max-height:min(760px,90vh);overflow:auto;background:var(--paper,#fff);color:var(--ink,#24191d);border:1px solid var(--line,#eadfe0);border-radius:24px 8px 24px 8px;box-shadow:0 28px 80px rgba(0,0,0,.28);padding:24px;position:relative}
 .ps-modal-close{position:absolute;right:14px;top:12px;width:40px;height:40px;border:1px solid var(--line,#eadfe0);border-radius:50%;background:transparent;color:inherit;font-size:22px;cursor:pointer}
-.ps-modal-kicker{font-size:9px;letter-spacing:.16em;font-weight:950;color:var(--berry,#a92f58);margin-bottom:7px}.ps-modal h3{font:700 30px Georgia,serif;margin:0 48px 8px 0}.ps-modal p{color:var(--soft,#725f67);line-height:1.6}.ps-rate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.ps-rate-box{padding:14px;border:1px solid var(--line,#eadfe0);border-radius:14px;background:rgba(169,47,88,.04)}.ps-rate-box b{display:block;font-size:18px;color:var(--berry,#a92f58)}.ps-days{display:flex;align-items:center;gap:10px;margin:16px 0}.ps-days input{width:85px;padding:11px;border:1px solid var(--line,#eadfe0);border-radius:10px;background:transparent;color:inherit;font:700 15px inherit}.ps-total{font:700 26px Georgia,serif;margin-top:10px}.ps-action{display:inline-block;margin-top:14px;padding:12px 16px;border-radius:999px;background:var(--ink,#24191d);color:var(--cream,#fff)!important;text-decoration:none;font-weight:800;font-size:11px}.ps-toast{position:fixed;left:50%;bottom:24px;z-index:100000;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#351923;color:#fff;padding:12px 17px;border-radius:999px;font-size:11px;font-weight:800;box-shadow:0 12px 30px rgba(0,0,0,.2);transition:.25s}.ps-toast.show{opacity:1;transform:translate(-50%,0)}
+.ps-modal-kicker{font-size:9px;letter-spacing:.16em;font-weight:950;color:var(--berry,#a92f58);margin-bottom:7px}.ps-modal h3{font:700 30px Georgia,serif;margin:0 48px 8px 0}.ps-modal p{color:var(--soft,#725f67);line-height:1.6}.ps-rate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.ps-rate-box{padding:14px;border:1px solid var(--line,#eadfe0);border-radius:14px;background:rgba(169,47,88,.04)}.ps-rate-box b{display:block;font-size:18px;color:var(--berry,#a92f58)}.ps-days{display:flex;align-items:center;gap:10px;margin:16px 0}.ps-days input{width:85px;padding:11px;border:1px solid var(--line,#eadfe0);border-radius:10px;background:transparent;color:inherit;font:700 15px inherit}.ps-total{font:700 26px Georgia,serif;margin-top:10px}.ps-rate-note{font-size:10px;color:var(--soft,#725f67)}.ps-days span{font-size:10px;color:var(--soft,#725f67);margin-left:auto}.ps-action{display:inline-block;margin-top:14px;padding:12px 16px;border-radius:999px;background:var(--ink,#24191d);color:var(--cream,#fff)!important;text-decoration:none;font-weight:800;font-size:11px;border:0;cursor:pointer}.ps-submit{width:100%;text-align:center}.ps-action:hover{transform:translateY(-1px)}.ps-toast{position:fixed;left:50%;bottom:24px;z-index:100000;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#351923;color:#fff;padding:12px 17px;border-radius:999px;font-size:11px;font-weight:800;box-shadow:0 12px 30px rgba(0,0,0,.2);transition:.25s}.ps-toast.show{opacity:1;transform:translate(-50%,0)}
 html[data-theme="dark"] .ps-modal-card,body.dark .ps-modal-card{background:#291f24;color:#fff5f8;border-color:rgba(255,190,211,.18)}
 html[data-theme="dark"] .ps-modal p,body.dark .ps-modal p{color:#dbc7cf}.html[data-theme="dark"] .ps-rate-box{}
 html[data-theme="dark"] .ps-rate-box,body.dark .ps-rate-box{border-color:rgba(255,190,211,.16);background:rgba(255,190,211,.05)}
@@ -4810,31 +5028,51 @@ html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color
   'use strict';
   if(window.__primeShotInteractive) return; window.__primeShotInteractive=true;
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  /* Rates are intentionally matched to the Rental rates & inclusions cards above.
+     Promo-wall figures are not used for the rental estimate. */
   const cameras={
-    'Insta360 Go Ultra':{rate:499,for:'POV · travel · content',style:'Immersive'},
-    'Canon Powershot A2600':{rate:200,for:'Everyday · trips',style:'Compact'},
-    'Nikon Coolpix A300':{rate:200,for:'Travel · everyday',style:'Classic'},
-    'Instax Mini Evo':{rate:400,for:'Dates · birthdays',style:'Instant / retro'},
-    'Nikon Coolpix A100':{rate:200,for:'Simple everyday shots',style:'Pocket'},
-    'Sony Cybershot DSC-120':{rate:200,for:'Casual · travel',style:'Classic compact'}
+    'Insta360 Go Ultra':{rate:499,longRate:449,threshold:4,for:'POV · travel · content',style:'Immersive'},
+    'Canon Powershot A2600':{rate:200,longRate:180,threshold:5,for:'Everyday · trips',style:'Compact'},
+    'Nikon Coolpix A300':{rate:200,longRate:180,threshold:5,for:'Travel · everyday',style:'Classic'},
+    'Instax Mini Evo':{rate:400,longRate:350,threshold:4,for:'Dates · birthdays',style:'Instant / retro'},
+    'Nikon Coolpix A100':{rate:200,longRate:180,threshold:5,for:'Simple everyday shots',style:'Pocket'},
+    'Sony Cybershot DSC-120':{rate:200,longRate:180,threshold:5,for:'Casual · travel',style:'Classic compact'}
   };
   const modal=document.createElement('div'); modal.className='ps-modal'; modal.id='psCameraModal'; modal.setAttribute('aria-hidden','true');
-  modal.innerHTML='<div class="ps-modal-card" role="dialog" aria-modal="true" aria-labelledby="psModalTitle"><button type="button" class="ps-modal-close" aria-label="Close">×</button><div class="ps-modal-kicker">CAMERA DETAILS</div><h3 id="psModalTitle"></h3><p id="psModalDesc"></p><div class="ps-rate-grid"><div class="ps-rate-box"><small>DAILY RATE</small><b id="psRate"></b></div><div class="ps-rate-box"><small>STYLE</small><b id="psStyle"></b></div></div><div class="ps-days"><label for="psDays"><strong>Rental days</strong></label><input id="psDays" type="number" min="1" max="30" value="1" inputmode="numeric"></div><div class="ps-total">Estimated total: <span id="psTotal"></span></div><a class="ps-action" id="psInquire" href="#contact">Inquire about this camera →</a></div></div>';
+  modal.innerHTML='<div class="ps-modal-card" role="dialog" aria-modal="true" aria-labelledby="psModalTitle"><button type="button" class="ps-modal-close" aria-label="Close">×</button><div class="ps-modal-kicker">CAMERA DETAILS</div><h3 id="psModalTitle"></h3><p id="psModalDesc"></p><div class="ps-rate-grid"><div class="ps-rate-box"><small>DAILY RATE</small><b id="psRate"></b></div><div class="ps-rate-box"><small>STYLE</small><b id="psStyle"></b></div></div><div class="ps-days"><label for="psDays"><strong>Rental days</strong></label><input id="psDays" type="number" min="0" step="1" value="0" inputmode="numeric"><span id="psRateNote"></span></div><div class="ps-total">Estimated total: <span id="psTotal">₱0</span></div><button type="button" class="ps-action ps-submit" id="psSubmit">Submit rental request →</button></div></div>';
   document.body.appendChild(modal);
   const toast=document.createElement('div'); toast.className='ps-toast'; document.body.appendChild(toast);
   let current=null, toastTimer;
   function money(n){return '₱'+Number(n).toLocaleString('en-PH')}
   function showToast(t){toast.textContent=t;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),2200)}
-  function openCamera(name){const c=cameras[name];if(!c)return;current={name,c};$('#psModalTitle').textContent=name;$('#psModalDesc').textContent='A PrimeShot pick for '+c.for.toLowerCase()+'. Explore the rate, choose your rental length, then inquire when you are ready.';$('#psRate').textContent=money(c.rate)+'/day';$('#psStyle').textContent=c.style;$('#psDays').value=1;$('#psTotal').textContent=money(c.rate);$('#psInquire').href='#contact';modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('#psDays').focus();}
+  function getDays(){let d=parseInt($('#psDays').value,10);if(!Number.isFinite(d)||d<0)d=0;d=Math.floor(d);$('#psDays').value=d;return d;}
+  function getRate(c,d){
+    if(d<=0) return c.rate;
+    return d>=c.threshold ? c.longRate : c.rate;
+  }
+  function updateEstimate(){
+    if(!current)return;
+    const d=getDays();
+    const rate=getRate(current.c,d);
+    $('#psRate').textContent=money(rate)+'/day';
+    $('#psTotal').textContent=money(rate*d);
+    $('#psRateNote').textContent=d===0
+      ? 'Enter rental days to calculate'
+      : (d>=current.c.threshold ? 'Longer-rental rate applied' : 'Standard daily rate');
+  }
+  function openCamera(name){const c=cameras[name];if(!c)return;current={name,c};$('#psModalTitle').textContent=name;$('#psModalDesc').textContent='A PrimeShot pick for '+c.for.toLowerCase()+'. Choose your rental length to see the current tiered estimate.';$('#psRate').textContent=money(c.rate)+'/day';$('#psStyle').textContent=c.style;$('#psDays').value=0;$('#psTotal').textContent='₱0';$('#psRateNote').textContent='Standard daily rate';modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('#psDays').focus();}
   function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';}
-  $('#psDays').addEventListener('input',function(){if(!current)return;let d=parseInt(this.value,10);if(!Number.isFinite(d))d=1;d=Math.max(1,Math.min(30,d));this.value=d;$('#psTotal').textContent=money(current.c.rate*d)});
+  $('#psDays').addEventListener('input',updateEstimate);
+  $('#psSubmit').addEventListener('click',function(){if(!current)return;const days=getDays();const bookingCamera=$('#bookingCamera');if(bookingCamera){bookingCamera.value=current.name;bookingCamera.dispatchEvent(new Event('change',{bubbles:true}));}closeModal();const calendar=$('#calendar');if(calendar)calendar.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{const dateInput=$('#bookingDate');if(dateInput)dateInput.focus();},650);});
   $('.ps-modal-close',modal).addEventListener('click',closeModal); modal.addEventListener('click',e=>{if(e.target===modal)closeModal()}); document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
   $$('.available-camera').forEach(card=>{
     const name=$('.camera-name',card)?.textContent.trim(); if(!cameras[name])return;
-    card.setAttribute('tabindex','0'); card.setAttribute('role','button'); card.setAttribute('aria-label','View details for '+name);
-    const open=()=>{ $$('.available-camera.is-selected').forEach(x=>x.classList.remove('is-selected')); card.classList.add('is-selected'); openCamera(name); };
-    card.addEventListener('click',e=>{if(e.target.closest('a'))return;open()}); card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
-    const link=$('.camera-link',card); if(link)link.addEventListener('click',e=>{e.preventDefault();open()});
+    /* Camera photos/cards are display-only. Only the Inquire link is interactive. */
+    const link=$('.camera-link',card);
+    if(link) link.addEventListener('click',()=>{
+      $$('.available-camera.is-selected').forEach(x=>x.classList.remove('is-selected'));
+      card.classList.add('is-selected');
+    });
   });
   $$('#camera-guide .comparison-row:not(.comparison-head)').forEach(row=>{
     const name=$('strong',row)?.textContent.trim(); if(!cameras[name])return; row.setAttribute('tabindex','0');
@@ -4847,7 +5085,8 @@ html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color
   const sections=$$('main section[id],section[id]'); const navLinks=$$('header a[href^="#"],nav a[href^="#"]');
   if('IntersectionObserver' in window&&sections.length&&navLinks.length){const navIO=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;navLinks.forEach(a=>a.classList.toggle('is-active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-35% 0px -55% 0px',threshold:0});sections.forEach(s=>navIO.observe(s))}
   navLinks.forEach(a=>a.addEventListener('click',()=>showToast('Opening '+a.textContent.trim().replace(/\s+/g,' ')+'…')));
-  $$('.available-camera img,.gallery-shot img,.gallery-uploading img').forEach(img=>{img.addEventListener('click',()=>{if(!img.src||img.src.endsWith('/')||img.naturalWidth===0)return;const w=window.open('','_blank','noopener');if(w){w.document.write('<title>PrimeShot Rentals</title><style>body{margin:0;background:#171014;display:grid;place-items:center;min-height:100vh}img{max-width:95vw;max-height:95vh;object-fit:contain}</style><img src="'+img.src.replace(/"/g,'&quot;')+'" alt="'+(img.alt||'PrimeShot camera')+'">');w.document.close()}})});
+  /* Keep Pick Your Camera photos non-clickable; gallery images elsewhere remain interactive. */
+  $$('.gallery-shot img,.gallery-uploading img').forEach(img=>{img.addEventListener('click',()=>{if(!img.src||img.src.endsWith('/')||img.naturalWidth===0)return;const w=window.open('','_blank','noopener');if(w){w.document.write('<title>PrimeShot Rentals</title><style>body{margin:0;background:#171014;display:grid;place-items:center;min-height:100vh}img{max-width:95vw;max-height:95vh;object-fit:contain}</style><img src="'+img.src.replace(/"/g,'&quot;')+'" alt="'+(img.alt||'PrimeShot camera')+'">');w.document.close()}})});
 })();
 </script>
 <script id="primeshot-premium-ui-js">
@@ -4905,6 +5144,73 @@ html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color
   window.addEventListener('scroll',update,{passive:true}); update();
 })();
 </script>
+
+<style id="light-mode-performance-fix">
+/* Light mode performance pass: keep the visual style, but remove the GPU-heavy effects that can cause stutter on phones. */
+html[data-theme="light"]{
+  --shadow:0 10px 28px rgba(0,0,0,.07);
+}
+html[data-theme="light"] body:after{
+  background:none !important;
+}
+html[data-theme="light"] nav{
+  background:rgba(255,255,255,.96) !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.035) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+html[data-theme="light"] .hero{
+  background:var(--cream) !important;
+}
+html[data-theme="light"] .hero-ticket,
+html[data-theme="light"] .hero-camera-card,
+html[data-theme="light"] .hero-mini-card,
+html[data-theme="light"] .gear-card,
+html[data-theme="light"] .calendar-card,
+html[data-theme="light"] .calendar-side,
+html[data-theme="light"] .booking-calendar-card,
+html[data-theme="light"] .booking-panel,
+html[data-theme="light"] .contact-card,
+html[data-theme="light"] form{
+  box-shadow:0 10px 28px rgba(0,0,0,.065) !important;
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease !important;
+}
+html[data-theme="light"] .hero-collage .hero-glow{
+  filter:none !important;
+  opacity:.72;
+}
+html[data-theme="light"] .ps-modal{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  background:rgba(20,10,15,.58) !important;
+}
+html[data-theme="light"] [data-reveal]{
+  transition:opacity .35s ease,transform .35s ease !important;
+}
+html[data-theme="light"] .reveal-in{
+  transition:opacity .35s ease,transform .35s ease !important;
+}
+@media(max-width:700px){
+  html[data-theme="light"] .hero-ticket,
+  html[data-theme="light"] .hero-camera-card,
+  html[data-theme="light"] .hero-mini-card,
+  html[data-theme="light"] .gear-card,
+  html[data-theme="light"] .calendar-card,
+  html[data-theme="light"] .calendar-side,
+  html[data-theme="light"] .booking-calendar-card,
+  html[data-theme="light"] .booking-panel,
+  html[data-theme="light"] .contact-card,
+  html[data-theme="light"] form{
+    box-shadow:0 6px 18px rgba(0,0,0,.055) !important;
+  }
+  html[data-theme="light"] .btn:hover,
+  html[data-theme="light"] .gear-card:hover,
+  html[data-theme="light"] .available-camera:hover .camera-thumb{
+    transform:none !important;
+    box-shadow:none !important;
+  }
+}
+</style>
 </body>
 </html>
 <style id="camera-shelf-balanced-layout">
