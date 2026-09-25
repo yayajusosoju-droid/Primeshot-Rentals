@@ -196,6 +196,8 @@ h3{font-size:27px;line-height:1;margin:9px 0}
 .day.empty{background:transparent;border-color:transparent;cursor:default}
 .day.today{outline:2px solid var(--berry);outline-offset:-2px}
 .day.booked{background:#f6ccd7;border-color:#e69aae;color:#8f2444}
+.day.past{background:#ece8e9!important;border-color:#d8d0d2!important;color:#9a8e92!important;opacity:.72;cursor:not-allowed!important}
+.day.past .availability-label{color:#9a8e92!important}
 .day.booked:after{content:"FULL";position:absolute;bottom:5px;right:6px;font-size:7px;font-weight:950}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:17px;font-size:11px;color:var(--soft)}
 .legend span{display:flex;align-items:center;gap:6px}.swatch{width:12px;height:12px;border:1px solid var(--line);background:#fff;border-radius:3px}.swatch.full{background:#f6ccd7}.swatch.today{outline:2px solid var(--berry)}
@@ -3867,6 +3869,100 @@ html{scroll-behavior:auto;}
 #gear .available-camera:hover .camera-thumb{transform:none !important;box-shadow:none !important;}
 #gear .available-camera .camera-link{cursor:pointer !important;}
 </style>
+<style id="light-mode-mobile-performance-fix">
+/* =========================================================
+   LIGHT MODE PERFORMANCE FIX
+   Keeps the PrimeShot look, but removes the GPU-heavy
+   effects that are most noticeable on phones.
+   Dark mode is intentionally left unchanged.
+   ========================================================= */
+@media (max-width: 700px){
+  html:not([data-theme="dark"]) body,
+  html[data-theme="light"] body,
+  body:not(.dark){
+    background:#fff6f4 !important;
+    background-image:linear-gradient(180deg,#fffaf7 0%,#fff3f5 52%,#fcecef 100%) !important;
+    background-attachment:scroll !important;
+  }
+
+  /* Remove the fixed SVG grain layer on light mobile. */
+  html:not([data-theme="dark"]) body::before,
+  html[data-theme="light"] body::before,
+  body:not(.dark)::before{
+    display:none !important;
+  }
+
+  /* Remove large blurred decorative blobs on light mobile. */
+  html:not([data-theme="dark"]) body::after,
+  html[data-theme="light"] body::after,
+  body:not(.dark)::after,
+  html:not([data-theme="dark"]) main::before,
+  html:not([data-theme="dark"]) main::after,
+  html[data-theme="light"] main::before,
+  html[data-theme="light"] main::after,
+  body:not(.dark) main::before,
+  body:not(.dark) main::after{
+    display:none !important;
+  }
+
+  /* No backdrop blur on the sticky navigation on light mobile. */
+  html:not([data-theme="dark"]) nav,
+  html[data-theme="light"] nav,
+  body:not(.dark) nav{
+    background:rgba(255,250,248,.97) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  /* Reduce large painted shadows on light mobile. */
+  html:not([data-theme="dark"]) .gear-card,
+  html:not([data-theme="dark"]) .gallery-shot,
+  html:not([data-theme="dark"]) .calendar-card,
+  html:not([data-theme="dark"]) .calendar-side,
+  html:not([data-theme="dark"]) .booking-calendar-card,
+  html:not([data-theme="dark"]) .booking-panel,
+  html:not([data-theme="dark"]) .promo,
+  html[data-theme="light"] .gear-card,
+  html[data-theme="light"] .gallery-shot,
+  html[data-theme="light"] .calendar-card,
+  html[data-theme="light"] .calendar-side,
+  html[data-theme="light"] .booking-calendar-card,
+  html[data-theme="light"] .booking-panel,
+  html[data-theme="light"] .promo,
+  body:not(.dark) .gear-card,
+  body:not(.dark) .gallery-shot,
+  body:not(.dark) .calendar-card,
+  body:not(.dark) .calendar-side,
+  body:not(.dark) .booking-calendar-card,
+  body:not(.dark) .booking-panel,
+  body:not(.dark) .promo{
+    box-shadow:0 8px 22px rgba(80,30,47,.07) !important;
+  }
+
+  /* Keep mobile interactions quick and avoid unnecessary compositing. */
+  html:not([data-theme="dark"]) .reveal-in,
+  html[data-theme="light"] .reveal-in,
+  body:not(.dark) .reveal-in{
+    transition-duration:.25s !important;
+  }
+
+  html:not([data-theme="dark"]) .booking-calendar-card .day:hover,
+  html[data-theme="light"] .booking-calendar-card .day:hover,
+  body:not(.dark) .booking-calendar-card .day:hover{
+    box-shadow:none !important;
+  }
+}
+
+/* Also make light-mode backgrounds cheaper on tablets/desktops without
+   removing the visual styling entirely. */
+@media (min-width:701px) and (max-width:1100px){
+  html:not([data-theme="dark"]) body,
+  html[data-theme="light"] body,
+  body:not(.dark){
+    background-attachment:scroll !important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -4475,12 +4571,36 @@ html{scroll-behavior:auto;}
   if(!daysEl||!label) return;
 
   const GOOGLE_SHEETS_WEB_APP='https://script.google.com/macros/s/AKfycbwCq8abnrdSaLgFj5-jj3WLpDe63q7gH263CRVMJL-AgXfW-e0N6gFHrLxvydnEgzI/exec';
-  const today=new Date();
+  let today=new Date();
   today.setHours(0,0,0,0);
   let viewYear=today.getFullYear();
   let viewMonth=today.getMonth();
   let approvedBookings=[];
   let selectedCamera=cameraSelect?.value || '';
+  let todayKey=dateKey(today.getFullYear(),today.getMonth(),today.getDate());
+
+  function syncToday(){
+    const now=new Date();
+    now.setHours(0,0,0,0);
+    const newKey=dateKey(now.getFullYear(),now.getMonth(),now.getDate());
+    if(newKey===todayKey) return false;
+    today=now;
+    todayKey=newKey;
+    if(rentalInput) rentalInput.min=todayKey;
+    if(returnInput) returnInput.min=rentalInput?.value || todayKey;
+    if(rentalInput?.value && rentalInput.value<todayKey){
+      rentalInput.value='';
+      if(returnInput) returnInput.value='';
+    }
+    if(returnInput?.value && returnInput.value<todayKey){
+      returnInput.value='';
+    }
+    return true;
+  }
+
+  // Past dates are never available for new rental requests.
+  if(rentalInput) rentalInput.min=todayKey;
+  if(returnInput) returnInput.min=todayKey;
 
   function dateKey(y,m,d){
     return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
@@ -4561,6 +4681,10 @@ html{scroll-behavior:auto;}
   }
 
   function selectDate(key){
+    if(key < todayKey){
+      alert('This date has already passed and is unavailable for rental requests. Please choose today or a future date.');
+      return;
+    }
     if(selectedCamera && cameraBookedOn(key,selectedCamera)){
       alert(selectedCamera+' is already booked on '+formatDate(key)+'. Please choose another date or camera.');
       return;
@@ -4572,6 +4696,7 @@ html{scroll-behavior:auto;}
   }
 
   function render(){
+    syncToday();
     const monthName=new Intl.DateTimeFormat('en-US',{month:'long',year:'numeric'}).format(new Date(viewYear,viewMonth,1));
     label.textContent=monthName;
     daysEl.innerHTML='';
@@ -4589,8 +4714,9 @@ html{scroll-behavior:auto;}
       const el=document.createElement('button');
       el.type='button';
       const k=dateKey(viewYear,viewMonth,d);
-      const status=availabilityForDate(k);
-      const cameraUnavailable=selectedCamera && cameraBookedOn(k,selectedCamera);
+      const isPast=k<todayKey;
+      const status=isPast ? 'past' : availabilityForDate(k);
+      const cameraUnavailable=!isPast && selectedCamera && cameraBookedOn(k,selectedCamera);
       const isSelected=k===rentalInput?.value;
       const isToday=viewYear===today.getFullYear() && viewMonth===today.getMonth() && d===today.getDate();
 
@@ -4598,15 +4724,19 @@ html{scroll-behavior:auto;}
       if(cameraUnavailable) el.classList.add('camera-unavailable');
       if(isSelected) el.classList.add('selected');
       if(isToday) el.classList.add('today');
-      if(cameraUnavailable) el.setAttribute('aria-disabled','true');
+      if(cameraUnavailable || isPast) el.setAttribute('aria-disabled','true');
 
-      const labelText=cameraUnavailable
+      const labelText=isPast
+        ? 'UNAVAILABLE'
+        : cameraUnavailable
         ? 'BOOKED FOR CAMERA'
         : status==='full' ? 'FULL'
         : status==='limited' ? 'LIMITED'
         : 'AVAILABLE';
       el.innerHTML='<span class="day-number">'+d+'</span><span class="availability-label">'+labelText+'</span>';
-      el.title=cameraUnavailable
+      el.title=isPast
+        ? 'This date has already passed and is unavailable'
+        : cameraUnavailable
         ? selectedCamera+' is booked on this date'
         : status==='full' ? 'All cameras are booked on this date'
         : status==='limited' ? 'Some cameras are booked on this date'
@@ -4660,12 +4790,35 @@ html{scroll-behavior:auto;}
     render();
     updateSelectedText();
   });
-  rentalInput?.addEventListener('change',updateSelectedText);
-  returnInput?.addEventListener('change',updateSelectedText);
+  rentalInput?.addEventListener('change',()=>{
+    if(rentalInput.value && rentalInput.value<todayKey){
+      rentalInput.value='';
+      alert('The rental date cannot be in the past. Please choose today or a future date.');
+    }
+    if(returnInput){
+      returnInput.min=rentalInput.value || todayKey;
+      if(returnInput.value && returnInput.value<(rentalInput.value || todayKey)) returnInput.value=rentalInput.value || '';
+    }
+    updateSelectedText();
+    render();
+  });
+  returnInput?.addEventListener('change',()=>{
+    const minReturn=rentalInput?.value || todayKey;
+    returnInput.min=minReturn;
+    if(returnInput.value && returnInput.value<minReturn){
+      returnInput.value='';
+      alert('The return date must be today or after the rental date.');
+    }
+    updateSelectedText();
+  });
 
   render();
   loadAvailability();
-  // Refresh approved bookings periodically so the calendar reflects admin changes.
+  // Keep the calendar synchronized with both new approvals and the passing of each day.
+  setInterval(()=>{
+    const dayChanged=syncToday();
+    if(dayChanged) render();
+  },30000);
   setInterval(loadAvailability,60000);
 })();
 
