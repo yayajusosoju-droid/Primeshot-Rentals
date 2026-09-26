@@ -2546,10 +2546,23 @@ body:not(.dark) .hero-kicker *{
 }
 </style>
 
-<style id="promo-main-copy-white-fix">
-/* PrimeShot weekend promo copy — pure white in light mode */
-html:not([data-theme="dark"]) .promo.main p,
-body:not(.dark) .promo.main p{
+<style id="promo-main-light-contrast-final">
+/* PrimeShot weekend promo — keep the featured promo dark/red with white copy in light mode */
+html[data-theme="light"] .promo.main,
+html[data-theme="light"] .promo.main{
+  background:linear-gradient(135deg,#b53052,#7e1f3b) !important;
+  background-image:linear-gradient(135deg,#b53052,#7e1f3b) !important;
+  color:#ffffff !important;
+  border-color:rgba(126,31,59,.45) !important;
+}
+html[data-theme="light"] .promo.main h3,
+html[data-theme="light"] .promo.main p,
+html[data-theme="light"] .promo.main small,
+html[data-theme="light"] .promo.main .price,
+html[data-theme="light"] .promo.main h3,
+html[data-theme="light"] .promo.main p,
+html[data-theme="light"] .promo.main small,
+html[data-theme="light"] .promo.main .price{
   color:#ffffff !important;
   -webkit-text-fill-color:#ffffff !important;
   opacity:1 !important;
@@ -3005,7 +3018,7 @@ html:not([data-theme="dark"]) .rates-grid .rate-card.rate-featured{
 <style id="light-mode-promos-white">
 /* PRIMESHOT — keep all promo cards white in light mode */
 html:not([data-theme="dark"]) .promos .promo,
-html:not([data-theme="dark"]) .promos .promo.main,
+html[data-theme="light"] .promos .promo.main,
 html:not([data-theme="dark"]) .promo-wall .promo {
   background:#ffffff !important;
   color:var(--ink) !important;
@@ -3698,12 +3711,9 @@ html[data-theme="dark"] .hero:after,body.dark .hero:after{background:radial-grad
 .rate-card li{color:var(--ps-muted)!important}
 .rate-prices strong{color:var(--ps-accent)!important}
 .rate-prices span,.rate-note{color:var(--ps-muted)!important}
-.rate-card .ps-rate-action{
-  display:inline-flex;align-items:center;justify-content:center;width:100%;margin-top:18px;padding:11px 14px;border-radius:999px;
-  border:1px solid var(--ps-line);background:var(--ps-surface);color:var(--ps-text);font-size:10px;font-weight:950;letter-spacing:.06em;transition:.2s
-}
+.rate-card 
 .rate-card .ps-rate-action:hover{background:var(--ps-accent);border-color:var(--ps-accent);color:#fff}
-.rate-card.rate-featured .ps-rate-action{background:var(--ps-accent);border-color:var(--ps-accent);color:#fff}
+.rate-card.rate-featured 
 
 /* Comparison rows */
 .comparison-row{transition:background .2s ease}
@@ -3961,6 +3971,147 @@ html{scroll-behavior:auto;}
   body:not(.dark){
     background-attachment:scroll !important;
   }
+}
+</style>
+
+<style id="light-card-black-text">
+/* PrimeShot light mode: text on light/white cards stays clearly black. */
+html[data-theme="light"] .rate-card,
+html[data-theme="light"] .camera-card,
+html[data-theme="light"] .gear-card,
+html[data-theme="light"] .calendar-card,
+html[data-theme="light"] .calendar-side,
+html[data-theme="light"] .contact-card,
+html[data-theme="light"] .booking-panel,
+html[data-theme="light"] .booking-calendar-card,
+html[data-theme="light"] .how-grid article,
+html[data-theme="light"] .match-question,
+html[data-theme="light"] #why-primeshot .ps-benefit-grid article,
+html[data-theme="light"] .available-camera,
+html[data-theme="light"] .comparison-table-wrap,
+html[data-theme="light"] .gallery-viewer-panel,
+html[data-theme="light"] .ps-modal-card {
+  color:#000 !important;
+}
+
+html[data-theme="light"] .rate-card h1,
+html[data-theme="light"] .rate-card h2,
+html[data-theme="light"] .rate-card h3,
+html[data-theme="light"] .rate-card h4,
+html[data-theme="light"] .rate-card p,
+html[data-theme="light"] .rate-card li,
+html[data-theme="light"] .camera-card h1,
+html[data-theme="light"] .camera-card h2,
+html[data-theme="light"] .camera-card h3,
+html[data-theme="light"] .camera-card h4,
+html[data-theme="light"] .camera-card p,
+html[data-theme="light"] .camera-card span,
+html[data-theme="light"] .gear-card h1,
+html[data-theme="light"] .gear-card h2,
+html[data-theme="light"] .gear-card h3,
+html[data-theme="light"] .gear-card h4,
+html[data-theme="light"] .gear-card p,
+html[data-theme="light"] .gear-card span,
+html[data-theme="light"] .how-grid article h1,
+html[data-theme="light"] .how-grid article h2,
+html[data-theme="light"] .how-grid article h3,
+html[data-theme="light"] .how-grid article h4,
+html[data-theme="light"] .how-grid article p,
+html[data-theme="light"] .how-grid article span,
+html[data-theme="light"] .match-question h1,
+html[data-theme="light"] .match-question h2,
+html[data-theme="light"] .match-question h3,
+html[data-theme="light"] .match-question h4,
+html[data-theme="light"] .match-question p,
+html[data-theme="light"] .match-question span,
+html[data-theme="light"] .available-camera h1,
+html[data-theme="light"] .available-camera h2,
+html[data-theme="light"] .available-camera h3,
+html[data-theme="light"] .available-camera h4,
+html[data-theme="light"] .available-camera p,
+html[data-theme="light"] .available-camera span {
+  color:#000 !important;
+}
+
+/* Keep interactive controls readable and branded. */
+html[data-theme="light"] .rate-card a,
+html[data-theme="light"] .camera-card a,
+html[data-theme="light"] .rate-card button,
+html[data-theme="light"] .camera-card button,
+html[data-theme="light"] .match-question button {
+  color:inherit;
+}
+<style id="promo-main-light-visibility-fix">
+/* Keep the copy readable on the red promo poster in light mode. */
+html[data-theme="light"] .promo.main,
+html[data-theme="light"] .promo.main h3,
+html[data-theme="light"] .promo.main p,
+html[data-theme="light"] .promo.main small {
+  color:#fff !important;
+}
+</style>
+</style>
+
+<style id="FINAL-PROMO-LIGHT-CONTRAST">
+/* Final light-mode correction: featured weekend promo stays dark/red with white text. */
+html[data-theme="light"] .promos .promo.main,
+html[data-theme="light"] .promos .promo.main,
+html[data-theme="light"] .promos .promo.main {
+  background: linear-gradient(135deg,#b53052,#7e1f3b) !important;
+  background-image: linear-gradient(135deg,#b53052,#7e1f3b) !important;
+  color:#fff !important;
+  border-color:rgba(126,31,59,.45) !important;
+}
+html[data-theme="light"] .promos .promo.main h3,
+html[data-theme="light"] .promos .promo.main p,
+html[data-theme="light"] .promos .promo.main small,
+html[data-theme="light"] .promos .promo.main .price,
+html[data-theme="light"] .promos .promo.main .circle,
+html[data-theme="light"] .promos .promo.main h3,
+html[data-theme="light"] .promos .promo.main p,
+html[data-theme="light"] .promos .promo.main small,
+html[data-theme="light"] .promos .promo.main .price {
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  opacity:1 !important;
+}
+/* All other light promo cards use dark text on their light backgrounds. */
+html[data-theme="light"] .promos .promo:not(.main) h3,
+html[data-theme="light"] .promos .promo:not(.main) p,
+html[data-theme="light"] .promos .promo:not(.main) small,
+html[data-theme="light"] .promos .promo:not(.main) .price {
+  color:#171719 !important;
+  -webkit-text-fill-color:#171719 !important;
+}
+</style>
+<style id="final-weekend-promo-light-mode">
+/* Final requested light-mode treatment: white card with black text. */
+html[data-theme="light"] .promos .promo.main,
+html[data-theme="light"] .promos .promo.main,
+html[data-theme="light"] .promos .promo.main {
+  background:#ffffff !important;
+  background-image:none !important;
+  color:#111111 !important;
+  border-color:rgba(20,20,20,.12) !important;
+}
+html[data-theme="light"] .promos .promo.main h3,
+html[data-theme="light"] .promos .promo.main p,
+html[data-theme="light"] .promos .promo.main small,
+html[data-theme="light"] .promos .promo.main .price,
+html[data-theme="light"] .promos .promo.main .circle,
+html[data-theme="light"] .promos .promo.main h3,
+html[data-theme="light"] .promos .promo.main p,
+html[data-theme="light"] .promos .promo.main small,
+html[data-theme="light"] .promos .promo.main .price,
+html[data-theme="light"] .promos .promo.main .circle,
+html[data-theme="light"] .promos .promo.main h3,
+html[data-theme="light"] .promos .promo.main p,
+html[data-theme="light"] .promos .promo.main small,
+html[data-theme="light"] .promos .promo.main .price {
+  color:#111111 !important;
+  -webkit-text-fill-color:#111111 !important;
+  opacity:1 !important;
+  text-shadow:none !important;
 }
 </style>
 </head>
@@ -4271,6 +4422,7 @@ html{scroll-behavior:auto;}
           <li>Quick release mount</li>
           <li>256 GB SD card</li>
         </ul>
+        <button type="button" class="rate-cta" data-camera="Insta360 Go Ultra">View camera &amp; availability →</button>
       </article>
 
       <article class="rate-card">
@@ -4287,6 +4439,7 @@ html{scroll-behavior:auto;}
           <li>Charge</li>
           <li>Camera case</li>
         </ul>
+        <button type="button" class="rate-cta" data-camera="Canon Powershot A2600">View camera &amp; availability →</button>
       </article>
 
       <article class="rate-card">
@@ -4303,6 +4456,7 @@ html{scroll-behavior:auto;}
           <li>Charge</li>
           <li>Camera case</li>
         </ul>
+        <button type="button" class="rate-cta" data-camera="Nikon Coolpix A300">View camera &amp; availability →</button>
       </article>
 
       <article class="rate-card rate-featured">
@@ -4320,6 +4474,7 @@ html{scroll-behavior:auto;}
           <li>Camera case</li>
           <li>Leather bag and strap</li>
         </ul>
+        <button type="button" class="rate-cta" data-camera="Instax Mini Evo">View camera &amp; availability →</button>
         <p class="rate-note">*Instax Mini film not included in this package.</p>
       </article>
 
@@ -4337,6 +4492,7 @@ html{scroll-behavior:auto;}
           <li>Charge</li>
           <li>Camera case</li>
         </ul>
+        <button type="button" class="rate-cta" data-camera="Nikon Coolpix A100">View camera &amp; availability →</button>
       </article>
 
       <article class="rate-card">
@@ -4353,6 +4509,7 @@ html{scroll-behavior:auto;}
           <li>Charge</li>
           <li>Camera case</li>
         </ul>
+        <button type="button" class="rate-cta" data-camera="Sony Cybershot DSC-120">View camera &amp; availability →</button>
       </article>
     </div>
   </div>
@@ -4423,8 +4580,11 @@ html{scroll-behavior:auto;}
           <span class="calendar-eyebrow">RENTAL REQUEST</span>
           <span class="secure-pill">● LIVE REQUEST</span>
         </div>
+        <div class="booking-steps" aria-label="Rental request steps">
+          <span class="active"><b>01</b> Camera</span><i></i><span><b>02</b> Dates</span><i></i><span><b>03</b> Details</span>
+        </div>
         <h3>Plan your rental.</h3>
-        <p id="selectedDateText">Select your preferred rental date from the calendar.</p>
+        <p id="selectedDateText">Select your camera and dates, then review everything before sending.</p>
 
         <label>CAMERA
           <select id="bookingCamera">
@@ -4437,24 +4597,32 @@ html{scroll-behavior:auto;}
           </select>
         </label>
 
-        <label>RENTAL DATE
-          <input id="bookingDate" type="date">
-        </label>
+        <div class="booking-date-grid">
+          <label>RENTAL DATE
+            <input id="bookingDate" type="date">
+          </label>
+          <label>RETURN DATE
+            <input id="bookingReturnDate" type="date">
+          </label>
+        </div>
 
-        <label>RETURN DATE
-          <input id="bookingReturnDate" type="date">
-        </label>
+        <div class="booking-detail-grid">
+          <label>NAME
+            <input id="bookingName" placeholder="Your name">
+          </label>
+          <label>MOBILE / EMAIL
+            <input id="bookingContact" placeholder="Mobile or email">
+          </label>
+        </div>
 
-        <label>NAME
-          <input id="bookingName" placeholder="Your name">
-        </label>
+        <div class="booking-review" id="bookingReview" aria-live="polite">
+          <div class="review-label">YOUR REQUEST</div>
+          <div class="review-main"><strong id="reviewCamera">Nikon Coolpix A100</strong><span id="reviewDates">Choose your dates</span></div>
+          <div class="review-meta"><span id="reviewDuration">0 days</span><b id="reviewEstimate">₱0</b></div>
+        </div>
 
-        <label>MOBILE / EMAIL
-          <input id="bookingContact" placeholder="How can we reach you?">
-        </label>
-
-        <button class="booking-submit" id="bookingSubmit">REQUEST THIS DATE →</button>
-
+        <button class="booking-submit" id="bookingSubmit">REVIEW REQUEST →</button>
+        <div class="booking-note">Your request stays <strong>Pending</strong> until PrimeShot approves the dates.</div>
       </aside>
     </div>
   </div>
@@ -4576,6 +4744,7 @@ html{scroll-behavior:auto;}
   let viewYear=today.getFullYear();
   let viewMonth=today.getMonth();
   let approvedBookings=[];
+  window.primeShotApprovedBookings=approvedBookings;
   let selectedCamera=cameraSelect?.value || '';
   let todayKey=dateKey(today.getFullYear(),today.getMonth(),today.getDate());
 
@@ -4682,11 +4851,11 @@ html{scroll-behavior:auto;}
 
   function selectDate(key){
     if(key < todayKey){
-      alert('This date has already passed and is unavailable for rental requests. Please choose today or a future date.');
+      window.primeShotNotice('This date has already passed and is unavailable for rental requests. Please choose today or a future date.',{title:'Date Unavailable',type:'warning'});
       return;
     }
     if(selectedCamera && cameraBookedOn(key,selectedCamera)){
-      alert(selectedCamera+' is already booked on '+formatDate(key)+'. Please choose another date or camera.');
+      window.primeShotNotice(selectedCamera+' is already booked on '+formatDate(key)+'. Please choose another date or camera.',{title:'Camera Unavailable',type:'warning'});
       return;
     }
     if(rentalInput) rentalInput.value=key;
@@ -4756,8 +4925,17 @@ html{scroll-behavior:auto;}
     };
     window[callbackName]=function(data){
       if(data && data.success && Array.isArray(data.bookings)){
-        approvedBookings=data.bookings;
+        // Only bookings returned by the approved-bookings endpoint are allowed
+        // to block dates. Pending and rejected requests never block the calendar.
+        approvedBookings=data.bookings.map(b=>({
+          camera:String(b.camera||'').trim(),
+          start:String(b.start||b.rentalDate||'').slice(0,10),
+          end:String(b.end||b.returnDate||b.rentalDate||'').slice(0,10),
+          status:String(b.status||'Approved').trim().toLowerCase()
+        })).filter(b=>b.camera&&b.start&&b.end&&(!b.status||b.status==='approved'));
+        window.primeShotApprovedBookings=approvedBookings;
       }else{
+        window.primeShotApprovedBookings=[];
         approvedBookings=[];
       }
       cleanup();
@@ -4766,8 +4944,9 @@ html{scroll-behavior:auto;}
     };
     script.onerror=function(){
       cleanup();
-      approvedBookings=[];
+      // Keep the last known approved bookings if the refresh temporarily fails.
       render();
+      updateSelectedText();
     };
     script.src=GOOGLE_SHEETS_WEB_APP+'?action=availability&callback='+encodeURIComponent(callbackName)+'&_='+Date.now();
     document.body.appendChild(script);
@@ -4793,7 +4972,7 @@ html{scroll-behavior:auto;}
   rentalInput?.addEventListener('change',()=>{
     if(rentalInput.value && rentalInput.value<todayKey){
       rentalInput.value='';
-      alert('The rental date cannot be in the past. Please choose today or a future date.');
+      window.primeShotNotice('The rental date cannot be in the past. Please choose today or a future date.',{title:'Date Unavailable',type:'warning'});
     }
     if(returnInput){
       returnInput.min=rentalInput.value || todayKey;
@@ -4807,7 +4986,7 @@ html{scroll-behavior:auto;}
     returnInput.min=minReturn;
     if(returnInput.value && returnInput.value<minReturn){
       returnInput.value='';
-      alert('The return date must be today or after the rental date.');
+      window.primeShotNotice('The return date must be today or after the rental date.',{title:'Invalid Return Date',type:'warning'});
     }
     updateSelectedText();
   });
@@ -4819,7 +4998,7 @@ html{scroll-behavior:auto;}
     const dayChanged=syncToday();
     if(dayChanged) render();
   },30000);
-  setInterval(loadAvailability,60000);
+  setInterval(loadAvailability,15000);
 })();
 
 
@@ -5013,18 +5192,39 @@ html{scroll-behavior:auto;}
     const contact=document.getElementById('bookingContact')?.value.trim() || '';
 
     if(!camera || !rentalDate || !returnDate || !name || !contact){
-      alert('Please fill in your camera, rental date, return date, name, and mobile/email before sending your request.');
+      window.primeShotNotice('Please fill in your camera, rental date, return date, name, and mobile/email before sending your request.',{title:'Missing Information',type:'warning'});
       return;
     }
 
     const start=new Date(rentalDate+'T00:00:00');
     const end=new Date(returnDate+'T00:00:00');
     if(Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())){
-      alert('Please select valid rental and return dates.');
+      window.primeShotNotice('Please select valid rental and return dates.',{title:'Invalid Dates',type:'warning'});
       return;
     }
     if(end < start){
-      alert('Your return date cannot be earlier than your rental date.');
+      window.primeShotNotice('Your return date cannot be earlier than your rental date.',{title:'Invalid Date Range',type:'warning'});
+      return;
+    }
+
+    // Final availability check against the latest approved bookings before sending.
+    // This prevents a camera from being requested if it was approved by someone else
+    // while this page was still open.
+    let conflictMessage='';
+    if(window.primeShotApprovedBookings && Array.isArray(window.primeShotApprovedBookings)){
+      const bookings=window.primeShotApprovedBookings;
+      for(const booking of bookings){
+        if(String(booking.camera||'').trim()!==camera) continue;
+        const bs=new Date(String(booking.start||'').slice(0,10)+'T00:00:00');
+        const be=new Date(String(booking.end||booking.start||'').slice(0,10)+'T00:00:00');
+        if(!Number.isNaN(bs.getTime()) && !Number.isNaN(be.getTime()) && start<=be && end>=bs){
+          conflictMessage='This camera is already reserved from '+(booking.start||'')+' to '+(booking.end||booking.start||'')+'. Please choose another date or camera.';
+          break;
+        }
+      }
+    }
+    if(conflictMessage){
+      window.primeShotNotice(conflictMessage,{title:'Camera Already Reserved',type:'warning'});
       return;
     }
 
@@ -5066,7 +5266,7 @@ html{scroll-behavior:auto;}
     // Google Apps Script receives the request in the background iframe.
     // Give the browser a moment to hand off the request before confirming.
     setTimeout(()=>{
-      alert('Your rental request has been sent successfully! PrimeShot Rentals will review your dates and contact you soon.');
+      window.primeShotNotice('Your rental request has been sent successfully! PrimeShot Rentals will review your dates and contact you soon.',{title:'Request Sent Successfully',type:'success'});
       ['bookingDate','bookingReturnDate','bookingName','bookingContact'].forEach(id=>{
         const el=document.getElementById(id);
         if(el) el.value='';
@@ -5076,6 +5276,34 @@ html{scroll-behavior:auto;}
       submit.textContent=originalText;
     },900);
   });
+})();
+</script>
+
+<script id="primeshot-booking-review-ui">
+(function(){
+  const btn=document.getElementById('bookingSubmit'); if(!btn)return;
+  let reviewing=false;
+  function money(n){return '₱'+Number(n).toLocaleString('en-PH');}
+  function rateFor(camera,days){
+    const r={
+      'Insta360 Go Ultra':[499,449,4],'Canon Powershot A2600':[200,180,5],'Nikon Coolpix A300':[200,180,5],
+      'Instax Mini Evo':[400,350,4],'Nikon Coolpix A100':[200,180,5],'Sony Cybershot DSC-120':[200,180,5]
+    }[camera]||[0,0,999]; return days>=r[2]?r[1]:r[0];
+  }
+  function showReview(){
+    const camera=document.getElementById('bookingCamera')?.value||'';const a=document.getElementById('bookingDate')?.value||'';const b=document.getElementById('bookingReturnDate')?.value||'';const name=document.getElementById('bookingName')?.value.trim()||'';const contact=document.getElementById('bookingContact')?.value.trim()||'';
+    if(!camera||!a||!b||!name||!contact){window.primeShotNotice('Please complete the camera, dates, name, and mobile/email first.',{title:'Complete Your Request',type:'warning'});return false;}
+    const start=new Date(a+'T00:00:00'),end=new Date(b+'T00:00:00');if(end<start){window.primeShotNotice('Your return date cannot be earlier than your rental date.',{title:'Invalid Date Range',type:'warning'});return false;}
+    const days=Math.floor((end-start)/86400000)+1;const total=rateFor(camera,days)*days;
+    document.getElementById('reviewCamera').textContent=camera;document.getElementById('reviewDates').textContent=a+' → '+b;document.getElementById('reviewDuration').textContent=days+' day'+(days===1?'':'s');document.getElementById('reviewEstimate').textContent=money(total);
+    btn.textContent='CONFIRM & SEND REQUEST →';reviewing=true;
+    btn.scrollIntoView({behavior:'smooth',block:'nearest'});return true;
+  }
+  btn.addEventListener('click',e=>{
+    if(!reviewing){e.preventDefault();e.stopImmediatePropagation();showReview();}
+  },true);
+  btn.addEventListener('click',()=>{if(reviewing){setTimeout(()=>{reviewing=false;btn.textContent='REVIEW REQUEST →';},1200);}},false);
+  ['bookingCamera','bookingDate','bookingReturnDate'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>{if(reviewing){reviewing=false;btn.textContent='REVIEW REQUEST →';}}));
 })();
 </script>
 
@@ -5157,13 +5385,18 @@ html[data-theme="dark"] .ps-days input,body.dark .ps-days input{border-color:rgb
 html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color:#fff!important}
 @media(max-width:600px){.ps-modal{padding:12px}.ps-modal-card{padding:20px}.ps-modal h3{font-size:25px}.ps-rate-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;transition:none}.available-camera,.comparison-row{transition:none}}
-/* Uniform Request Camera buttons */
-.rate-card{display:flex;flex-direction:column;}
-.rate-card .ps-rate-action{
+/* Uniform camera action buttons — same spacing/alignment on every rate card */
+.rates-grid .rate-card{
+  display:flex;
+  flex-direction:column;
+}
+.rates-grid .rate-card .rate-cta{
   width:100%;
-  min-height:42px;
+  min-height:44px;
+  height:44px;
   margin-top:auto !important;
-  flex-shrink:0;
+  padding:11px 16px;
+  flex:0 0 44px;
   box-sizing:border-box;
   display:flex;
   align-items:center;
@@ -5171,10 +5404,152 @@ html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color
   text-align:center;
   line-height:1.2;
   white-space:nowrap;
+  border:0;
+  border-radius:999px;
+  cursor:pointer;
+}
+.rates-grid .rate-card .rate-note{
+  order:1;
+  min-height:18px;
+  margin:10px 0 8px;
+}
+.rates-grid .rate-card .rate-cta{order:2;}
+@media(max-width:600px){
+  .rates-grid .rate-card .rate-cta{min-height:44px;height:44px;flex-basis:44px;padding:11px 10px;font-size:9px;}
+}
+</style>
+<style id="rate-cta-visibility-fix">
+/* Ensure View Camera & Availability buttons are always clearly visible */
+.rates-grid .rate-card .rate-cta,
+#rates .rate-card .rate-cta{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:relative !important;
+  z-index:5 !important;
+  width:100% !important;
+  min-width:0 !important;
+  height:46px !important;
+  min-height:46px !important;
+  flex:0 0 46px !important;
+  margin-top:auto !important;
+  margin-bottom:0 !important;
+  padding:0 16px !important;
+  box-sizing:border-box !important;
+  border:1px solid #a92f58 !important;
+  border-radius:12px !important;
+  background:#a92f58 !important;
+  color:#ffffff !important;
+  font:800 10px/1.2 inherit !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  text-align:center !important;
+  align-items:center !important;
+  justify-content:center !important;
+  white-space:nowrap !important;
+  cursor:pointer !important;
+  box-shadow:0 8px 18px rgba(169,47,88,.18) !important;
+}
+.rates-grid .rate-card .rate-cta:hover,
+#rates .rate-card .rate-cta:hover{
+  background:#8f2449 !important;
+  border-color:#8f2449 !important;
+  color:#ffffff !important;
+  transform:translateY(-2px) !important;
+}
+html[data-theme="dark"] .rates-grid .rate-card .rate-cta,
+html[data-theme="dark"] #rates .rate-card .rate-cta,
+body.dark .rates-grid .rate-card .rate-cta,
+body.dark #rates .rate-card .rate-cta{
+  background:#f0a5bf !important;
+  border-color:#f0a5bf !important;
+  color:#4b2436 !important;
+  box-shadow:0 8px 20px rgba(240,165,191,.16) !important;
+}
+html[data-theme="dark"] .rates-grid .rate-card .rate-cta:hover,
+html[data-theme="dark"] #rates .rate-card .rate-cta:hover,
+body.dark .rates-grid .rate-card .rate-cta:hover,
+body.dark #rates .rate-card .rate-cta:hover{
+  background:#ffc0d5 !important;
+  border-color:#ffc0d5 !important;
+  color:#3b202b !important;
 }
 @media(max-width:600px){
-  .rate-card .ps-rate-action{min-height:42px;padding:11px 10px;font-size:9px;}
+  .rates-grid .rate-card .rate-cta,
+  #rates .rate-card .rate-cta{height:46px !important;min-height:46px !important;flex-basis:46px !important;padding:0 10px !important;font-size:9px !important}
 }
+</style>
+<style id="primeshot-notice-ui">
+.ps-notice-overlay{position:fixed;inset:0;z-index:100001;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,10,15,.58);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;transition:opacity .22s ease}
+.ps-notice-overlay.open{display:flex;opacity:1}
+.ps-notice-card{width:min(430px,100%);background:var(--paper,#fff);color:var(--ink,#24191d);border:1px solid var(--line,#eadfe0);border-radius:24px 8px 24px 8px;box-shadow:0 28px 80px rgba(0,0,0,.28);padding:26px;position:relative;transform:translateY(12px) scale(.97);transition:transform .25s ease}
+.ps-notice-overlay.open .ps-notice-card{transform:translateY(0) scale(1)}
+.ps-notice-icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;margin-bottom:15px;background:rgba(169,47,88,.10);color:var(--berry,#a92f58);font-size:22px;font-weight:900}
+.ps-notice-card.success .ps-notice-icon{background:rgba(47,150,91,.12);color:#2f965b}
+.ps-notice-card.warning .ps-notice-icon{background:rgba(218,143,40,.13);color:#c47a16}
+.ps-notice-card.error .ps-notice-icon{background:rgba(190,52,72,.12);color:#b92f47}
+.ps-notice-kicker{font-size:9px;letter-spacing:.18em;font-weight:950;color:var(--berry,#a92f58);margin-bottom:7px}
+.ps-notice-card h3{font:700 27px Georgia,serif;margin:0 40px 8px 0}
+.ps-notice-card p{margin:0;color:var(--soft,#725f67);line-height:1.6;font-size:13px}
+.ps-notice-close{position:absolute;right:13px;top:12px;width:38px;height:38px;border:1px solid var(--line,#eadfe0);border-radius:50%;background:transparent;color:inherit;font-size:21px;cursor:pointer;transition:.2s}
+.ps-notice-close:hover{background:rgba(169,47,88,.08);transform:rotate(90deg)}
+.ps-notice-ok{width:100%;margin-top:20px;padding:12px 16px;border:0;border-radius:999px;background:var(--ink,#24191d);color:#fff;font:800 11px inherit;letter-spacing:.03em;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.ps-notice-ok:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.16)}
+html[data-theme="dark"] .ps-notice-card,body.dark .ps-notice-card{background:#291f24;color:#fff5f8;border-color:rgba(255,190,211,.18)}
+html[data-theme="dark"] .ps-notice-card p,body.dark .ps-notice-card p{color:#dbc7cf}
+html[data-theme="dark"] .ps-notice-close,body.dark .ps-notice-close{border-color:rgba(255,190,211,.18)}
+html[data-theme="dark"] .ps-notice-ok,body.dark .ps-notice-ok{background:#ff5f8f;color:#fff}
+@media(max-width:600px){.ps-notice-overlay{padding:14px}.ps-notice-card{padding:22px;border-radius:20px 7px 20px 7px}.ps-notice-card h3{font-size:24px}.ps-notice-card p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.ps-notice-overlay,.ps-notice-card{transition:none}}
+</style>
+<script id="primeshot-notice-ui-script">
+(function(){
+  if(window.primeShotNotice) return;
+  const overlay=document.createElement('div');
+  overlay.className='ps-notice-overlay';
+  overlay.setAttribute('aria-hidden','true');
+  overlay.innerHTML='<div class="ps-notice-card" role="dialog" aria-modal="true" aria-labelledby="psNoticeTitle" aria-describedby="psNoticeMessage"><button type="button" class="ps-notice-close" aria-label="Close">×</button><div class="ps-notice-icon" id="psNoticeIcon">!</div><div class="ps-notice-kicker" id="psNoticeKicker">PRIMESHOT RENTALS</div><h3 id="psNoticeTitle">Notice</h3><p id="psNoticeMessage"></p><button type="button" class="ps-notice-ok">Okay</button></div>';
+  document.body.appendChild(overlay);
+  const card=overlay.querySelector('.ps-notice-card'), title=overlay.querySelector('#psNoticeTitle'), message=overlay.querySelector('#psNoticeMessage'), icon=overlay.querySelector('#psNoticeIcon'), kicker=overlay.querySelector('#psNoticeKicker');
+  let lastFocus=null;
+  function close(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');if(lastFocus&&typeof lastFocus.focus==='function')setTimeout(()=>lastFocus.focus(),0);}
+  overlay.querySelector('.ps-notice-close').addEventListener('click',close);
+  overlay.querySelector('.ps-notice-ok').addEventListener('click',close);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))close()});
+  window.primeShotNotice=function(messageText,opts){
+    opts=opts||{}; lastFocus=document.activeElement;
+    const type=opts.type||'warning';
+    card.className='ps-notice-card '+type;
+    title.textContent=opts.title||({success:'Request Sent',error:'Unable to Continue',warning:'Please Check',info:'PrimeShot Rentals'}[type]||'Notice');
+    message.textContent=messageText;
+    kicker.textContent=opts.kicker||'PRIMESHOT RENTALS';
+    icon.textContent=type==='success'?'✓':type==='error'?'×':type==='info'?'i':'!';
+    overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');
+    setTimeout(()=>overlay.querySelector('.ps-notice-ok').focus(),40);
+  };
+})();
+</script>
+
+<style id="client-impress-upgrades">
+/* Premium camera / rates / booking experience */
+#rates .rate-card{display:flex;flex-direction:column}
+.rate-cta{width:100%;min-height:42px;margin-top:auto;padding:11px 14px;border:1px solid var(--berry,#a92f58);border-radius:999px;background:transparent;color:var(--berry,#a92f58);font:800 10px/1.2 inherit;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:.2s ease;display:flex;align-items:center;justify-content:center;text-align:center;white-space:nowrap;box-sizing:border-box}
+.rate-cta:hover{background:var(--berry,#a92f58);color:#fff;transform:translateY(-2px)}
+.rate-card .rate-cta{margin-bottom:0}
+html[data-theme="dark"] .rate-cta,body.dark .rate-cta{color:#ffb1c9;border-color:#9e4b69}
+html[data-theme="dark"] .rate-cta:hover,body.dark .rate-cta:hover{background:#f0a5bf;color:#3b202b}
+#gear .available-camera{position:relative;overflow:hidden;border-radius:20px;padding:14px;background:linear-gradient(145deg,rgba(255,255,255,.86),rgba(255,232,239,.55));border:1px solid rgba(169,47,88,.14)}
+#gear .available-camera::after{content:"";position:absolute;inset:auto 12px 10px auto;width:34px;height:34px;border:1px solid rgba(169,47,88,.18);border-radius:50%}
+#gear .camera-status{letter-spacing:.12em}
+html[data-theme="dark"] #gear .available-camera,body.dark #gear .available-camera{background:linear-gradient(145deg,rgba(58,37,47,.95),rgba(76,39,55,.72));border-color:rgba(255,190,211,.16)}
+.booking-steps{display:flex;align-items:center;gap:8px;margin:18px 0 8px;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:#bbaab0}
+.booking-steps span{display:flex;align-items:center;gap:5px;white-space:nowrap}.booking-steps span.active{color:#fff}.booking-steps b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#4a343d;color:#fff;font-size:8px}.booking-steps .active b{background:#f0a5bf;color:#4a2433}.booking-steps i{height:1px;flex:1;background:#59434c}
+.booking-date-grid,.booking-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.booking-review{margin-top:15px;padding:14px;border:1px solid rgba(240,165,191,.22);border-radius:16px;background:rgba(255,255,255,.045)}.review-label{font-size:8px;letter-spacing:.15em;color:#f0a5bf;font-weight:900;margin-bottom:8px}.review-main{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.review-main strong{font-size:13px;color:#fff}.review-main span{font-size:10px;color:#d4c4ca;text-align:right}.review-meta{display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);font-size:10px;color:#cbbbc1}.review-meta b{color:#f5b0c7;font-size:14px}.booking-note{margin-top:10px;font-size:9px;line-height:1.5;color:#aa9ba1}.booking-note strong{color:#f0a5bf}
+@media(max-width:650px){.booking-date-grid,.booking-detail-grid{grid-template-columns:1fr}.booking-steps{gap:5px}.booking-steps span{font-size:7px}.booking-steps b{width:21px;height:21px}.rate-cta{min-height:42px;padding:11px 10px;font-size:9px}}
+
+.ps-camera-detail-card{width:min(760px,100%)}.ps-camera-detail-grid{display:grid;grid-template-columns:minmax(220px,.9fr) 1.1fr;gap:22px;align-items:center}.ps-modal-image{position:relative;min-height:250px;border-radius:18px;overflow:hidden;background:linear-gradient(145deg,#f7e8ec,#fff);display:grid;place-items:center}.ps-modal-image img{width:100%;height:100%;min-height:250px;object-fit:contain}.ps-modal-image:has(img[src=""]){background:linear-gradient(145deg,#f7e8ec,#fff)}.ps-modal-image span{position:absolute;left:12px;bottom:12px;padding:7px 9px;border-radius:999px;background:#24191d;color:#fff;font-size:8px;font-weight:900;letter-spacing:.1em}.ps-includes{margin:18px 0}.ps-includes #psIncludesList{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.ps-includes #psIncludesList span{padding:7px 10px;border:1px solid var(--line,#eadfe0);border-radius:999px;background:rgba(169,47,88,.045);font-size:10px;color:var(--soft,#725f67)}html[data-theme="dark"] .ps-modal-image,body.dark .ps-modal-image{background:linear-gradient(145deg,#3b2630,#25191f)}html[data-theme="dark"] .ps-includes #psIncludesList span,body.dark .ps-includes #psIncludesList span{border-color:#714055;color:#ead4dc;background:rgba(255,255,255,.04)}
+@media(max-width:650px){.ps-camera-detail-grid{grid-template-columns:1fr}.ps-modal-image,.ps-modal-image img{min-height:190px;max-height:240px}.ps-camera-detail-card{max-height:92vh}}
 </style>
 <script id="primeshot-interactive-upgrades">
 (function(){
@@ -5184,15 +5559,15 @@ html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color
   /* Rates are intentionally matched to the Rental rates & inclusions cards above.
      Promo-wall figures are not used for the rental estimate. */
   const cameras={
-    'Insta360 Go Ultra':{rate:499,longRate:449,threshold:4,for:'POV · travel · content',style:'Immersive'},
-    'Canon Powershot A2600':{rate:200,longRate:180,threshold:5,for:'Everyday · trips',style:'Compact'},
-    'Nikon Coolpix A300':{rate:200,longRate:180,threshold:5,for:'Travel · everyday',style:'Classic'},
-    'Instax Mini Evo':{rate:400,longRate:350,threshold:4,for:'Dates · birthdays',style:'Instant / retro'},
-    'Nikon Coolpix A100':{rate:200,longRate:180,threshold:5,for:'Simple everyday shots',style:'Pocket'},
-    'Sony Cybershot DSC-120':{rate:200,longRate:180,threshold:5,for:'Casual · travel',style:'Classic compact'}
+    'Insta360 Go Ultra':{rate:499,longRate:449,threshold:4,for:'POV · travel · content',style:'Immersive',includes:['Magnetic pendant','Magnetic easy clip','Mini tripod','Battery + USB cable','Pivot stand','Quick release mount','256 GB SD card']},
+    'Canon Powershot A2600':{rate:200,longRate:180,threshold:5,for:'Everyday · trips',style:'Compact',includes:['16GB card','SD card reader','Charger','Camera case']},
+    'Nikon Coolpix A300':{rate:200,longRate:180,threshold:5,for:'Travel · everyday',style:'Classic',includes:['16GB card','SD card reader','Charger','Camera case']},
+    'Instax Mini Evo':{rate:400,longRate:350,threshold:4,for:'Dates · birthdays',style:'Instant / retro',includes:['32GB card','SD card reader','Charger','Camera case','Leather bag + strap']},
+    'Nikon Coolpix A100':{rate:200,longRate:180,threshold:5,for:'Simple everyday shots',style:'Pocket',includes:['16GB card','SD card reader','Charger','Camera case']},
+    'Sony Cybershot DSC-120':{rate:200,longRate:180,threshold:5,for:'Casual · travel',style:'Classic compact',includes:['16GB card','SD card reader','Charger','Camera case']}
   };
   const modal=document.createElement('div'); modal.className='ps-modal'; modal.id='psCameraModal'; modal.setAttribute('aria-hidden','true');
-  modal.innerHTML='<div class="ps-modal-card" role="dialog" aria-modal="true" aria-labelledby="psModalTitle"><button type="button" class="ps-modal-close" aria-label="Close">×</button><div class="ps-modal-kicker">CAMERA DETAILS</div><h3 id="psModalTitle"></h3><p id="psModalDesc"></p><div class="ps-rate-grid"><div class="ps-rate-box"><small>DAILY RATE</small><b id="psRate"></b></div><div class="ps-rate-box"><small>STYLE</small><b id="psStyle"></b></div></div><div class="ps-days"><label for="psDays"><strong>Rental days</strong></label><input id="psDays" type="number" min="0" step="1" value="0" inputmode="numeric"><span id="psRateNote"></span></div><div class="ps-total">Estimated total: <span id="psTotal">₱0</span></div><button type="button" class="ps-action ps-submit" id="psSubmit">Submit rental request →</button></div></div>';
+  modal.innerHTML='<div class="ps-modal-card ps-camera-detail-card" role="dialog" aria-modal="true" aria-labelledby="psModalTitle"><button type="button" class="ps-modal-close" aria-label="Close">×</button><div class="ps-camera-detail-grid"><div class="ps-modal-image"><img id="psModalImage" alt=""><span id="psModalStatus">CHECKING AVAILABILITY</span></div><div><div class="ps-modal-kicker">CAMERA DETAILS</div><h3 id="psModalTitle"></h3><p id="psModalDesc"></p><div class="ps-rate-grid"><div class="ps-rate-box"><small>DAILY RATE</small><b id="psRate"></b></div><div class="ps-rate-box"><small>STYLE</small><b id="psStyle"></b></div></div></div></div><div class="ps-includes"><div class="ps-modal-kicker">INCLUDED</div><div id="psIncludesList"></div></div><div class="ps-days"><label for="psDays"><strong>Rental days</strong></label><input id="psDays" type="number" min="0" step="1" value="0" inputmode="numeric"><span id="psRateNote"></span></div><div class="ps-total">Estimated total: <span id="psTotal">₱0</span></div><button type="button" class="ps-action ps-submit" id="psSubmit">Check availability &amp; request →</button></div></div>';
   document.body.appendChild(modal);
   const toast=document.createElement('div'); toast.className='ps-toast'; document.body.appendChild(toast);
   let current=null, toastTimer;
@@ -5213,7 +5588,19 @@ html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color
       ? 'Enter rental days to calculate'
       : (d>=current.c.threshold ? 'Longer-rental rate applied' : 'Standard daily rate');
   }
-  function openCamera(name){const c=cameras[name];if(!c)return;current={name,c};$('#psModalTitle').textContent=name;$('#psModalDesc').textContent='A PrimeShot pick for '+c.for.toLowerCase()+'. Choose your rental length to see the current tiered estimate.';$('#psRate').textContent=money(c.rate)+'/day';$('#psStyle').textContent=c.style;$('#psDays').value=0;$('#psTotal').textContent='₱0';$('#psRateNote').textContent='Standard daily rate';modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('#psDays').focus();}
+  function openCamera(name){
+    const c=cameras[name];if(!c)return;current={name,c};
+    const sourceCard=$$('.available-camera').find(card=>$('.camera-name',card)?.textContent.trim()===name);
+    const img=sourceCard?.querySelector('.camera-thumb img');
+    $('#psModalImage').src=img?.src||''; $('#psModalImage').alt=name;
+    $('#psModalStatus').textContent='LIVE AVAILABILITY';
+    $('#psModalTitle').textContent=name;
+    $('#psModalDesc').textContent='A PrimeShot pick for '+c.for.toLowerCase()+'. See what is included, estimate your rental, then continue to the live booking calendar.';
+    $('#psRate').textContent=money(c.rate)+'/day';$('#psStyle').textContent=c.style;
+    $('#psIncludesList').innerHTML=(c.includes||[]).map(x=>'<span>✓ '+x+'</span>').join('');
+    $('#psDays').value=0;$('#psTotal').textContent='₱0';$('#psRateNote').textContent='Enter rental days to calculate';
+    modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('#psDays').focus();
+  }
   function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';}
   $('#psDays').addEventListener('input',updateEstimate);
   $('#psSubmit').addEventListener('click',function(){if(!current)return;const days=getDays();const bookingCamera=$('#bookingCamera');if(bookingCamera){bookingCamera.value=current.name;bookingCamera.dispatchEvent(new Event('change',{bubbles:true}));}closeModal();const calendar=$('#calendar');if(calendar)calendar.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{const dateInput=$('#bookingDate');if(dateInput)dateInput.focus();},650);});
@@ -5227,6 +5614,7 @@ html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color
       card.classList.add('is-selected');
     });
   });
+  $$('.rate-cta').forEach(btn=>btn.addEventListener('click',()=>{openCamera(btn.dataset.camera); }));
   $$('#camera-guide .comparison-row:not(.comparison-head)').forEach(row=>{
     const name=$('strong',row)?.textContent.trim(); if(!cameras[name])return; row.setAttribute('tabindex','0');
     const open=()=>{$$('#camera-guide .comparison-row.is-selected').forEach(x=>x.classList.remove('is-selected'));row.classList.add('is-selected');openCamera(name)};
@@ -5245,24 +5633,6 @@ html[data-theme="dark"] .ps-action,body.dark .ps-action{background:#ff5f8f;color
 <script id="primeshot-premium-ui-js">
 (function(){
   const root=document.documentElement;
-  // Add request actions to every existing rate card without changing the pricing/content.
-  document.querySelectorAll('.rate-card').forEach(card=>{
-    if(card.querySelector('.ps-rate-action')) return;
-    const title=card.querySelector('h3')?.textContent?.trim() || 'Camera';
-    const a=document.createElement('a');
-    a.className='ps-rate-action';
-    a.href='#calendar';
-    a.textContent='REQUEST THIS CAMERA →';
-    a.addEventListener('click',()=>{
-      const select=document.getElementById('bookingCamera');
-      if(select){
-        [...select.options].forEach(o=>o.selected=(o.textContent.trim()===title));
-        select.dispatchEvent(new Event('change',{bubbles:true}));
-      }
-    });
-    card.appendChild(a);
-  });
-
   // Back-to-top control.
   const top=document.createElement('button');
   top.className='ps-top'; top.type='button'; top.setAttribute('aria-label','Back to top'); top.textContent='↑';
@@ -5364,6 +5734,24 @@ html[data-theme="light"] .reveal-in{
   }
 }
 </style>
+<style id="light-mode-promo-card-match">
+/* Light mode: PROMOS THAT DESERVE A SCREENSHOT uses the same card color as the
+   “Made for the moments that matter” cards. Dark mode remains unchanged. */
+html[data-theme="light"] .promo-wall .promo {
+  background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(169,47,88,.035)) !important;
+  color:var(--ink) !important;
+}
+html[data-theme="light"] .promo-wall .promo h3,
+html[data-theme="light"] .promo-wall .promo p,
+html[data-theme="light"] .promo-wall .promo small,
+html[data-theme="light"] .promo-wall .promo .price {
+  color:var(--ink) !important;
+}
+html[data-theme="light"] .promo-wall .promo .circle {
+  background:var(--paper) !important;
+  color:var(--red) !important;
+}
+</style>
 </body>
 </html>
 <style id="camera-shelf-balanced-layout">
@@ -5393,5 +5781,109 @@ body:not(.dark) .booking-panel h3{color:#351923 !important}
   0%{transform:translateY(0) scale(1);}
   35%{transform:translateY(-7px) scale(1.08);}
   100%{transform:translateY(0) scale(1);}
+}
+</style>
+
+<style id="primeshot-date-input-visibility-fix">
+/* Make Plan Your Rental date fields clearly visible in both themes */
+.booking-panel .booking-date-grid label{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:7px !important;
+  min-width:0 !important;
+}
+.booking-panel .booking-date-grid input[type="date"]{
+  width:100% !important;
+  min-height:46px !important;
+  box-sizing:border-box !important;
+  display:block !important;
+  appearance:auto !important;
+  -webkit-appearance:auto !important;
+  background:#30262b !important;
+  color:#fff !important;
+  border:1px solid #6b5660 !important;
+  border-radius:10px !important;
+  padding:12px 13px !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  color-scheme:dark !important;
+  cursor:pointer !important;
+  opacity:1 !important;
+}
+.booking-panel .booking-date-grid input[type="date"]::-webkit-calendar-picker-indicator{
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  cursor:pointer !important;
+  width:18px !important;
+  height:18px !important;
+  padding:2px !important;
+  filter:none !important;
+}
+.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit,
+.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-text,
+.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-month-field,
+.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-day-field,
+.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-year-field{
+  color:#fff !important;
+  opacity:1 !important;
+}
+html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]{
+  background:#fff !important;
+  color:#30262b !important;
+  border-color:#d8c9ce !important;
+  color-scheme:light !important;
+}
+html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit,
+html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-text,
+html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-month-field,
+html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-day-field,
+html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-year-field{color:#30262b !important;}
+html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-calendar-picker-indicator{
+  opacity:1 !important;
+  filter:none !important;
+}
+.booking-panel .booking-date-grid input[type="date"]:focus{
+  outline:2px solid #f0a5bf !important;
+  outline-offset:2px !important;
+  border-color:#f0a5bf !important;
+}
+@media(max-width:650px){
+  .booking-panel .booking-date-grid input[type="date"]{min-height:48px !important;font-size:13px !important}
+}
+</style>
+
+<style id="light-mode-unified-card-color">
+/* Light mode: use the exact same card surface treatment as
+   the "Made for the moments that matter" cards everywhere. */
+html[data-theme="light"] .card,
+html[data-theme="light"] .rate-card,
+html[data-theme="light"] .camera-card,
+html[data-theme="light"] .gear-card,
+html[data-theme="light"] .hero-ticket,
+html[data-theme="light"] .hero-camera-card,
+html[data-theme="light"] .hero-mini-card,
+html[data-theme="light"] .calendar-card,
+html[data-theme="light"] .calendar-side,
+html[data-theme="light"] .booking-panel,
+html[data-theme="light"] .booking-calendar-card,
+html[data-theme="light"] .contact-card,
+html[data-theme="light"] .how-grid article,
+html[data-theme="light"] .match-question,
+html[data-theme="light"] .available-camera,
+html[data-theme="light"] .comparison-table-wrap,
+html[data-theme="light"] .gallery-viewer-panel,
+html[data-theme="light"] .ps-modal-card,
+html[data-theme="light"] .promo,
+html[data-theme="light"] .contact-main,
+html[data-theme="light"] form {
+  background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(169,47,88,.035)) !important;
+}
+</style>
+
+<style id="light-mode-modal-white-fix">
+/* Light mode: keep the camera popup fully white. Dark mode remains unchanged. */
+html[data-theme="light"] .ps-modal-card {
+  background:#fff !important;
 }
 </style>
