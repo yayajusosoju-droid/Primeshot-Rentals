@@ -1252,9 +1252,10 @@ html[data-theme="dark"] .gear-card img{
   background-color: #a8325c !important;
   color: #fff !important;
 }
-.logo-brand,
-.logo-brand .brand-name {
+html[data-theme="light"] .logo-brand,
+html[data-theme="light"] .logo-brand .brand-name {
   color: #171719 !important;
+  -webkit-text-fill-color: #171719 !important;
 }
 
 /* Prevent common hard-coded light-theme text from becoming muddy in dark mode. */
@@ -4114,6 +4115,116 @@ html[data-theme="light"] .promos .promo.main .price {
   text-shadow:none !important;
 }
 </style>
+
+<style id="primeshot-topbar-dark-consistency-fix">
+/* FINAL: identical dark-mode topbar branding on every viewport. */
+html[data-theme="dark"] nav .logo-brand .brand-name,
+html[data-theme="dark"] nav .logo-brand,
+html[data-theme="dark"] nav .brand-name {
+  color:#f8eaf0 !important;
+  -webkit-text-fill-color:#f8eaf0 !important;
+  text-shadow:none !important;
+  opacity:1 !important;
+  filter:none !important;
+  mix-blend-mode:normal !important;
+}
+
+html[data-theme="dark"] nav {
+  background:rgba(28,16,24,.88) !important;
+}
+
+@media (max-width:1000px) {
+  html[data-theme="dark"] nav .logo-brand .brand-name,
+  html[data-theme="dark"] nav .logo-brand,
+  html[data-theme="dark"] nav .brand-name {
+    color:#f8eaf0 !important;
+    -webkit-text-fill-color:#f8eaf0 !important;
+    text-shadow:none !important;
+    opacity:1 !important;
+    filter:none !important;
+    mix-blend-mode:normal !important;
+  }
+  html[data-theme="dark"] nav {
+    background:rgba(28,16,24,.88) !important;
+  }
+}
+</style>
+
+<style id="primeshot-booking-review-visibility-fix">
+/* Review Request preview — force readable text in BOTH themes. */
+.booking-review,
+.booking-review * {
+  opacity:1 !important;
+  visibility:visible !important;
+  -webkit-text-fill-color:currentColor;
+}
+
+/* Light mode */
+html[data-theme="light"] .booking-panel .booking-review,
+html:not([data-theme="dark"]) .booking-panel .booking-review {
+  background:#fff !important;
+  border-color:#d9cbd0 !important;
+  color:#351923 !important;
+}
+html[data-theme="light"] .booking-panel .booking-review .review-label,
+html:not([data-theme="dark"]) .booking-panel .booking-review .review-label {
+  color:#9e294c !important;
+  -webkit-text-fill-color:#9e294c !important;
+}
+html[data-theme="light"] .booking-panel .booking-review .review-main strong,
+html:not([data-theme="dark"]) .booking-panel .booking-review .review-main strong {
+  color:#351923 !important;
+  -webkit-text-fill-color:#351923 !important;
+}
+html[data-theme="light"] .booking-panel .booking-review .review-main span,
+html:not([data-theme="dark"]) .booking-panel .booking-review .review-main span {
+  color:#5f4b52 !important;
+  -webkit-text-fill-color:#5f4b52 !important;
+}
+html[data-theme="light"] .booking-panel .booking-review .review-meta,
+html:not([data-theme="dark"]) .booking-panel .booking-review .review-meta {
+  color:#5f4b52 !important;
+  border-top-color:#e5dadd !important;
+}
+html[data-theme="light"] .booking-panel .booking-review .review-meta b,
+html:not([data-theme="dark"]) .booking-panel .booking-review .review-meta b {
+  color:#8f2148 !important;
+  -webkit-text-fill-color:#8f2148 !important;
+}
+
+/* Dark mode */
+html[data-theme="dark"] .booking-panel .booking-review,
+body.dark .booking-panel .booking-review {
+  background:#30262b !important;
+  border-color:rgba(255,190,211,.24) !important;
+  color:#fff5f8 !important;
+}
+html[data-theme="dark"] .booking-panel .booking-review .review-label,
+body.dark .booking-panel .booking-review .review-label {
+  color:#f0a5bf !important;
+  -webkit-text-fill-color:#f0a5bf !important;
+}
+html[data-theme="dark"] .booking-panel .booking-review .review-main strong,
+body.dark .booking-panel .booking-review .review-main strong {
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+html[data-theme="dark"] .booking-panel .booking-review .review-main span,
+body.dark .booking-panel .booking-review .review-main span {
+  color:#ead8df !important;
+  -webkit-text-fill-color:#ead8df !important;
+}
+html[data-theme="dark"] .booking-panel .booking-review .review-meta,
+body.dark .booking-panel .booking-review .review-meta {
+  color:#d9c7cf !important;
+  border-top-color:rgba(255,255,255,.14) !important;
+}
+html[data-theme="dark"] .booking-panel .booking-review .review-meta b,
+body.dark .booking-panel .booking-review .review-meta b {
+  color:#ffb1c9 !important;
+  -webkit-text-fill-color:#ffb1c9 !important;
+}
+</style>
 </head>
 <body>
 
@@ -5753,137 +5864,6 @@ html[data-theme="light"] .promo-wall .promo .circle {
 }
 </style>
 </body>
+
+
 </html>
-<style id="camera-shelf-balanced-layout">
-/* Balanced six-camera layout */
-#gear .camera-rail{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:0 !important;}
-#gear .available-camera{border-right:1px solid rgba(234,215,220,.7);border-bottom:1px solid rgba(234,215,220,.7);padding:10px 10px 14px;}
-#gear .available-camera:nth-child(3n){border-right:0;}
-#gear .available-camera:nth-child(n+4){border-bottom:0;}
-@media(max-width:700px){#gear .camera-rail{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}#gear .available-camera:nth-child(3n){border-right:1px solid rgba(234,215,220,.7);}#gear .available-camera:nth-child(2n){border-right:0;}#gear .available-camera:nth-child(n+4){border-bottom:1px solid rgba(234,215,220,.7);}#gear .available-camera:nth-child(n+5){border-bottom:0;}}
-@media(max-width:480px){#gear .camera-rail{gap:0 !important;}#gear .available-camera{padding:8px 5px 11px;}#gear .camera-thumb{width:88px;height:88px;margin-bottom:9px;}}
-
-/* Light-mode text fixes */
-html[data-theme="light"] .comparison-row span{color:#fff !important}
-body:not(.dark) .comparison-row span{color:#fff !important}
-html[data-theme="light"] .booking-panel h3{color:#351923 !important}
-body:not(.dark) .booking-panel h3{color:#351923 !important}
-
-/* Live Request — dark mode readability */
-@media (prefers-color-scheme: dark){.secure-pill{color:#fff !important}}
-</style>
-
-<style id="back-to-top-final-position">
-/* Move the back-to-top button down after removing Quick Rental. */
-.ps-top{bottom:22px !important;}
-.ps-top.is-returning{animation:psTopReturn .7s ease-in-out;}
-@keyframes psTopReturn{
-  0%{transform:translateY(0) scale(1);}
-  35%{transform:translateY(-7px) scale(1.08);}
-  100%{transform:translateY(0) scale(1);}
-}
-</style>
-
-<style id="primeshot-date-input-visibility-fix">
-/* Make Plan Your Rental date fields clearly visible in both themes */
-.booking-panel .booking-date-grid label{
-  display:flex !important;
-  flex-direction:column !important;
-  gap:7px !important;
-  min-width:0 !important;
-}
-.booking-panel .booking-date-grid input[type="date"]{
-  width:100% !important;
-  min-height:46px !important;
-  box-sizing:border-box !important;
-  display:block !important;
-  appearance:auto !important;
-  -webkit-appearance:auto !important;
-  background:#30262b !important;
-  color:#fff !important;
-  border:1px solid #6b5660 !important;
-  border-radius:10px !important;
-  padding:12px 13px !important;
-  font-size:12px !important;
-  font-weight:700 !important;
-  color-scheme:dark !important;
-  cursor:pointer !important;
-  opacity:1 !important;
-}
-.booking-panel .booking-date-grid input[type="date"]::-webkit-calendar-picker-indicator{
-  display:block !important;
-  opacity:1 !important;
-  visibility:visible !important;
-  cursor:pointer !important;
-  width:18px !important;
-  height:18px !important;
-  padding:2px !important;
-  filter:none !important;
-}
-.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit,
-.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-text,
-.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-month-field,
-.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-day-field,
-.booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-year-field{
-  color:#fff !important;
-  opacity:1 !important;
-}
-html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]{
-  background:#fff !important;
-  color:#30262b !important;
-  border-color:#d8c9ce !important;
-  color-scheme:light !important;
-}
-html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit,
-html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-text,
-html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-month-field,
-html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-day-field,
-html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-datetime-edit-year-field{color:#30262b !important;}
-html:not([data-theme="dark"]) .booking-panel .booking-date-grid input[type="date"]::-webkit-calendar-picker-indicator{
-  opacity:1 !important;
-  filter:none !important;
-}
-.booking-panel .booking-date-grid input[type="date"]:focus{
-  outline:2px solid #f0a5bf !important;
-  outline-offset:2px !important;
-  border-color:#f0a5bf !important;
-}
-@media(max-width:650px){
-  .booking-panel .booking-date-grid input[type="date"]{min-height:48px !important;font-size:13px !important}
-}
-</style>
-
-<style id="light-mode-unified-card-color">
-/* Light mode: use the exact same card surface treatment as
-   the "Made for the moments that matter" cards everywhere. */
-html[data-theme="light"] .card,
-html[data-theme="light"] .rate-card,
-html[data-theme="light"] .camera-card,
-html[data-theme="light"] .gear-card,
-html[data-theme="light"] .hero-ticket,
-html[data-theme="light"] .hero-camera-card,
-html[data-theme="light"] .hero-mini-card,
-html[data-theme="light"] .calendar-card,
-html[data-theme="light"] .calendar-side,
-html[data-theme="light"] .booking-panel,
-html[data-theme="light"] .booking-calendar-card,
-html[data-theme="light"] .contact-card,
-html[data-theme="light"] .how-grid article,
-html[data-theme="light"] .match-question,
-html[data-theme="light"] .available-camera,
-html[data-theme="light"] .comparison-table-wrap,
-html[data-theme="light"] .gallery-viewer-panel,
-html[data-theme="light"] .ps-modal-card,
-html[data-theme="light"] .promo,
-html[data-theme="light"] .contact-main,
-html[data-theme="light"] form {
-  background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(169,47,88,.035)) !important;
-}
-</style>
-
-<style id="light-mode-modal-white-fix">
-/* Light mode: keep the camera popup fully white. Dark mode remains unchanged. */
-html[data-theme="light"] .ps-modal-card {
-  background:#fff !important;
-}
-</style>
